@@ -46,3 +46,9 @@ CREATE TABLE Features_list (
   name VARCHAR,
   hotel_features_id INT REFERENCES Hotel_Features(hotelfeatures_id),
 );
+
+CREATE TABLE Rating (
+  rating_id INT,
+  rate INT,
+  Feedback_id INT REFERENCES Feedback(feedback_id),
+);
