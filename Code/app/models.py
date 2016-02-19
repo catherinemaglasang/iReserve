@@ -1,28 +1,15 @@
-from app import db
-from flask import Flask
-from flask.ext.security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
-app = Flask(__name__)
+from sqlalchemy import create_engine
+import os
 
-#define models
-roles_users = db.Table('roles_users',
-                       db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+class DBconn:
+    def __init__(self):
+        engine = create_engine("postgresql://postgres:asdasd@localhost/iReserve", echo=False)
+        self.conn = engine.connect()
+        self.trans = self.conn.begin()
 
-class Role(db.Model, RoleMixin):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
+    def getcursor(self):
+        cursor = self.conn.connection.cursor()
+        return cursor
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
-    first_name = db.Column(db.String(80))
-    last_name = db.Column(db.String(80))
-    contact_number = db.Column(db.Integer())
-    address = db.Column(db.String(255))
-    birthday = db.Column(db.DateTime())
-    active = db.Column(db.Boolean())
-    roles = db.relationship('Role', secondary=roles_users,
-                            backref=db.backref('users', lazy='dynamic'))
-
+    def dbcommit(self):
+        self.trans.commit()
