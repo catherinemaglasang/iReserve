@@ -40,3 +40,9 @@ CREATE TABLE Hotel_Features (
   name VARCHAR,
   hotel_id INT REFERENCES Hotel(hotel_id),
 );
+
+CREATE TABLE Features_list (
+  features_id INT,
+  name VARCHAR,
+  hotel_features_id INT REFERENCES Hotel_Features(hotelfeatures_id),
+);
