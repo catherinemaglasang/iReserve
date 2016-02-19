@@ -25,4 +25,12 @@ CREATE TABLE Hotel_Personnel (
 );
 
 
+CREATE TABLE Message_recipient (
+ id_msg_recipient INT PRIMARY KEY,
+ is_read BOOLEAN,
+ customer_id INT REFERENCES Customer (id_customer)
+
+);
+
+
 
