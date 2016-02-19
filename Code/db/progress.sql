@@ -8,7 +8,21 @@ CREATE TABLE Customer (
   postal_code VARCHAR,
   gender INT,
   birthdate VARCHAR,
-  is_active BOOLEAN,
+  is_active BOOLEAN
+);
+
+CREATE TABLE Hotel (
+  hotel_id INT PRIMARY KEY,
+  hotel_name VARCHAR,
+  description TEXT,
+  email_address VARCHAR,
+  address VARCHAR,
+  contact_number VARCHAR,
+  google_map VARCHAR,
+  no_of_restaurant INT,
+  no_of_rooms INT,
+  extra TEXT,
+  is_active BOOLEAN
 );
 
 CREATE TABLE Hotel_Personnel (
@@ -30,14 +44,14 @@ CREATE TABLE Message_recipient (
 CREATE TABLE Message(
  id_message INT PRIMARY KEY,
  msg TEXT,
- timesent DATETIME,
+ timesent TIMESTAMP,
  msg_recipient_id INT REFERENCES Message_recipient (id_msg_recipient)
 );
 
-CREATE TABLE Transaction (
+CREATE TABLE Online_Transaction (
  id_transaction INT PRIMARY KEY,
  transaction_number INT,
- date_of_transaction DATETIME,
+ date_of_transaction TIMESTAMP,
  downpayment VARCHAR,
  is_done BOOLEAN,
  hotel_id INT REFERENCES Hotel(hotel_id),
@@ -59,24 +73,10 @@ CREATE TABLE Type (
   room_id INT references Room(id_room)
 );
 
-CREATE TABLE Hotel (
-  hotel_id INT PRIMARY KEY,
-  hotel_name VARCHAR,
-  description TEXT,
-  email_address VARCHAR,
-  address VARCHAR,
-  contact_number VARCHAR,
-  google_map VARCHAR,
-  no_of_restaurant INT,
-  no_of_rooms INT,
-  extra TEXT,
-  is_active BOOLEAN
-);
-
 CREATE TABLE Feedback (
   feedback_id INT PRIMARY KEY,
   comment TEXT,
-  created_date DATETIME,
+  created_date TIMESTAMP,
   is_active BOOLEAN,
   hotel_id INT REFERENCES Hotel(hotel_id)
 );
