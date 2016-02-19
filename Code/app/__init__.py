@@ -6,9 +6,9 @@ from flask.ext.sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 # api = Api(app)
 #Include config from config.py
-app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql://postgres:asdasd@localhost/flask'
+app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql://postgres:asdasd@localhost/iReserve'
 app.secret_key = '23jDSJ32lzcxcwsSDWJK'
 app.CSRF_ENABLED = True
 #Create an instance of SQLAclhemy
 db = SQLAlchemy(app)
-from app import views, models
+from app import views, models, api
