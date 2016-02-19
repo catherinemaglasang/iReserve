@@ -34,3 +34,9 @@ CREATE TABLE Feedback (
   is_active BOOLEAN,
   hotel_id INT REFERENCES Hotel(hotel_id),
 );
+
+CREATE TABLE Hotel_Features (
+  hotel_features_id INT,
+  name VARCHAR,
+  hotel_id INT REFERENCES Hotel(hotel_id),
+);
