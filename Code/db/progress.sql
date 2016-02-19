@@ -26,3 +26,11 @@ CREATE TABLE Hotel (
   extra TEXT,
   is_active BOOLEAN,
 );
+
+CREATE TABLE Feedback (
+  feedback_id INT,
+  comment TEXT,
+  created_date DATETIME,
+  is_active BOOLEAN,
+  hotel_id INT REFERENCES Hotel(hotel_id),
+);
