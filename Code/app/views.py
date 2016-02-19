@@ -6,7 +6,6 @@ import sys
 from app.models import *
 
 
-
 def spcall(qry, param, commit=False):
     try:
         dbo = DBconn()
@@ -21,13 +20,9 @@ def spcall(qry, param, commit=False):
     return res
 
 
-
-
-
 @app.route("/")
 def index():
     return "Hello World!"
-
 
 
 @app.after_request
