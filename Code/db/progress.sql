@@ -40,3 +40,14 @@ CREATE TABLE Message(
 
 );
 
+CREATE TABLE Transaction (
+ id_transaction INT PRIMARY KEY,
+ transaction_number INT,
+ date_of_transaction DATETIME,
+ downpayment VARCHAR,
+ is_done BOOLEAN,
+ hotel_id INT REFERENCES Hotel(hotel_id),
+ customer_id INT REFERENCES Customer (id_customer),
+
+);
+
