@@ -1,6 +1,6 @@
 from app import app
 import os
-from flask import Flask, jsonify, url_for
+from flask import Flask, jsonify, url_for, render_template
 import flask
 import sys
 from app.models import *
@@ -22,7 +22,7 @@ def spcall(qry, param, commit=False):
 
 @app.route("/")
 def index():
-    return "Hello World!"
+    return render_template('index.html')
 
 
 @app.after_request
