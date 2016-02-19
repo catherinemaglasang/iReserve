@@ -32,5 +32,11 @@ CREATE TABLE Message_recipient (
 
 );
 
+CREATE TABLE Message(
+ id_message INT PRIMARY KEY,
+ msg TEXT,
+ timesent DATETIME,
+ msg_recipient_id INT REFERENCES Message_recipient (id_msg_recipient)
 
+);
 
