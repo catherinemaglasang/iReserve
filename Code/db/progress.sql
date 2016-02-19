@@ -52,3 +52,10 @@ CREATE TABLE Rating (
   rate INT,
   Feedback_id INT REFERENCES Feedback(feedback_id),
 );
+
+CREATE TABLE Image (
+  image_id INT,
+  img VARCHAR,
+  id_customer INT REFERENCES Customer(id_customer),
+  hotel_id INT REFERENCES Hotel(hotel_id),
+);
