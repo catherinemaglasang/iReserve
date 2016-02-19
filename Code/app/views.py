@@ -1,4 +1,4 @@
-from app import app, db
+from app import app
 import os
 from flask import Flask, jsonify, url_for
 import flask
