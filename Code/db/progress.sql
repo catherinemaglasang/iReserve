@@ -1,24 +1,25 @@
 CREATE TABLE Customer (
   id_customer INT PRIMARY KEY,
-  email_address VARCHAR,
-  fname VARCHAR,
-  lname VARCHAR,
-  contact_number VARCHAR,
-  address VARCHAR,
-  postal_code VARCHAR,
+  email_address TEXT,
+  customer_password TEXT,
+  fname TEXT,
+  lname TEXT,
+  contact_number TEXT,
+  address TEXT,
+  postal_code TEXT,
   gender INT,
-  birthdate VARCHAR,
+  birthdate TEXT,
   is_active BOOLEAN
 );
 
 CREATE TABLE Hotel (
   hotel_id INT PRIMARY KEY,
-  hotel_name VARCHAR,
+  hotel_name TEXT,
   description TEXT,
-  email_address VARCHAR,
-  address VARCHAR,
-  contact_number VARCHAR,
-  google_map VARCHAR,
+  email_address TEXT,
+  address TEXT,
+  contact_number TEXT,
+  google_map TEXT,
   no_of_restaurant INT,
   no_of_rooms INT,
   extra TEXT,
@@ -27,10 +28,10 @@ CREATE TABLE Hotel (
 
 CREATE TABLE Hotel_Personnel (
  id_personnel INT PRIMARY KEY,
- fname VARCHAR,
- mname VARCHAR,
- lname VARCHAR,
- password VARCHAR,
+ fname TEXT,
+ mname TEXT,
+ lname TEXT,
+ personnel_password TEXT,
  is_active BOOLEAN,
  hotel_id INT REFERENCES Hotel(hotel_id)
 );
@@ -52,7 +53,7 @@ CREATE TABLE Online_Transaction (
  id_transaction INT PRIMARY KEY,
  transaction_number INT,
  date_of_transaction TIMESTAMP,
- downpayment VARCHAR,
+ downpayment TEXT,
  is_done BOOLEAN,
  hotel_id INT REFERENCES Hotel(hotel_id),
  customer_id INT REFERENCES Customer (id_customer)
@@ -61,7 +62,7 @@ CREATE TABLE Online_Transaction (
 
 CREATE TABLE Room (
   id_room INT PRIMARY KEY,
-  room_number VARCHAR,
+  room_number TEXT,
   cost INT,
   available_room INT,
   hotel_id INT references Hotel(hotel_id)
@@ -69,7 +70,7 @@ CREATE TABLE Room (
 
 CREATE TABLE Type (
   id_room_type INT PRIMARY KEY,
-  room_type VARCHAR,
+  room_type TEXT,
   room_id INT references Room(id_room)
 );
 
@@ -83,13 +84,13 @@ CREATE TABLE Feedback (
 
 CREATE TABLE Hotel_Features (
   hotel_features_id INT PRIMARY KEY,
-  name VARCHAR,
+  name TEXT,
   hotel_id INT REFERENCES Hotel(hotel_id)
 );
 
 CREATE TABLE Features_list (
   features_id INT PRIMARY KEY,
-  name VARCHAR,
+  name TEXT,
   hotel_features_id INT REFERENCES Hotel_Features(hotel_features_id)
 );
 
@@ -101,8 +102,31 @@ CREATE TABLE Rating (
 
 CREATE TABLE Image (
   image_id INT PRIMARY KEY,
-  img VARCHAR,
+  img TEXT,
   id_customer INT REFERENCES Customer(id_customer),
   hotel_id INT REFERENCES Hotel(hotel_id)
 );
 
+create or replace function newcustomer(par_id INT, par_email TEXT, par_password TEXT, par_fname TEXT, par_lname TEXT, par_contact TEXT,
+                                      par_address TEXT, par_postal TEXT, par_gender INT, par_birthdate TEXT, par_is_active BOOLEAN) returns TEXT as
+$$
+  DECLARE
+    loc_id INT;
+    loc_res TEXT;
+  BEGIN
+    SELECT INTO loc_id id_customer FROM Customer WHERE id_customer = par_id;
+    if loc_id isnull THEN
+
+      INSERT INTO Customer (id_customer, email_address, customer_password, fname, lname, contact_number, address,
+      postal_code, gender, birthdate, is_active) VALUES (par_id, par_email, par_password, par_fname, par_lname, par_contact, par_address, par_postal, par_gender, par_birthdate, TRUE);
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+--select newcustomer (1, 'koneb2013@gmail.com', 'asdasd', 'Neiell Care', 'Paradiang', '09263555557', 'Iligan City', '9200', 1, 'AUGUST-20-1995', TRUE);
