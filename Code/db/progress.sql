@@ -9,8 +9,7 @@ CREATE TABLE Customer (
   gender BOOLEAN,
   birthdate VARCHAR,
   is_active BOOLEAN,
-
-  PRIMARY KEY(id_customer)
+  
 );
 
 CREATE TABLE Hotel_Personnel (
