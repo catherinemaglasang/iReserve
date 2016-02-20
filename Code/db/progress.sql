@@ -107,8 +107,9 @@ CREATE TABLE Image (
   hotel_id INT REFERENCES Hotel(hotel_id)
 );
 
-create or replace function newcustomer(par_id INT, par_email TEXT, par_password TEXT, par_fname TEXT, par_lname TEXT, par_contact TEXT,
-                                      par_address TEXT, par_postal TEXT, par_gender INT, par_birthdate TEXT, par_is_active BOOLEAN) returns TEXT as
+create or replace function newcustomer(par_id INT, par_email TEXT, par_password TEXT, par_fname TEXT, par_lname TEXT,
+                                      par_contact TEXT, par_address TEXT, par_postal TEXT, par_gender INT,
+                                      par_birthdate TEXT, par_is_active BOOLEAN) returns TEXT as
 $$
   DECLARE
     loc_id INT;
@@ -118,7 +119,8 @@ $$
     if loc_id isnull THEN
 
       INSERT INTO Customer (id_customer, email_address, customer_password, fname, lname, contact_number, address,
-      postal_code, gender, birthdate, is_active) VALUES (par_id, par_email, par_password, par_fname, par_lname, par_contact, par_address, par_postal, par_gender, par_birthdate, TRUE);
+      postal_code, gender, birthdate, is_active) VALUES (par_id, par_email, par_password, par_fname, par_lname,
+                                                  par_contact, par_address, par_postal, par_gender, par_birthdate, TRUE);
       loc_res = 'OK';
 
       ELSE
@@ -130,3 +132,28 @@ $$
   LANGUAGE 'plpgsql';
 
 --select newcustomer (1, 'koneb2013@gmail.com', 'asdasd', 'Neiell Care', 'Paradiang', '09263555557', 'Iligan City', '9200', 1, 'AUGUST-20-1995', TRUE);
+
+create or replace function getcustomer(OUT INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT,
+                                        OUT TEXT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS
+$$
+
+  SELECT id_customer, email_address, customer_password, fname, lname, contact_number, address,
+      postal_code, gender, birthdate, is_active FROM Customer;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getcustomer();
+
+create or replace function getcustomer_id(IN par_id INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT,
+                                        OUT TEXT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS
+$$
+
+  SELECT email_address, customer_password, fname, lname, contact_number, address,
+      postal_code, gender, birthdate, is_active FROM Customer WHERE id_customer = par_id;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getcustomer_id(1);
+

@@ -3,7 +3,8 @@ import os
 from flask import Flask, jsonify, url_for, render_template
 import flask
 import sys
-from app.models import *
+from flask_httpauth import HTTPBasicAuth
+from models import *
 
 
 def spcall(qry, param, commit=False):
@@ -23,6 +24,8 @@ def spcall(qry, param, commit=False):
 @app.route("/")
 def index():
     return render_template('index.html')
+
+@app.route('/login', methods=['GET'])
 
 
 @app.after_request
