@@ -10,6 +10,58 @@ jQuery(document).ready(function($){
 		backToLoginLink = formForgotPassword.find('.cd-form-bottom-message a'),
 		mainNav = $('.main-nav');
 
+	$("#form-login").click(function(){
+		var email = $("#signin-email").val();
+		var password = $("#signin-password").val();
+
+		$.ajax({
+			url: 'http://127.0.0.1:5000//api/login',
+			type: "POST",
+			dataType: "json",
+			data: { email_address: email, customer_password:password },
+			success:
+				function(data, textStatus, jqXHR)
+					{
+						//data - response from server
+					},
+			error:
+				function(jqXHR, textStatus, errorThrown)
+					{
+						alert(textStatus);
+					}
+
+		});
+	});
+
+	$("#form-signup").click(function(){
+		 var email = $("#signup-email").val();
+		 var password = $("#signup-password").val();
+		 var fname = $("#signup-fname").val();
+		 var lname = $("#signup-lname").val();
+		 var gender = $("#signup-gender").val();
+		 var contact = $("#signup-contact").val();
+		 var bday = $("#signup-birthdate").val();
+		 var address = $("#signup-address").val();
+		 var postal = $("#signup-postal").val();
+
+		 $.ajax({
+            url: 'http://127.0.0.1:5000/api/register' + '/' + email + '/' + password + '/' + fname + '/' + lname
+				+ '/' + contact + '/' + address + '/' + postal + '/' + gender + '/' + bday,
+            type	: 'POST',
+            dataType: "json",
+            contentType: 'application/json',
+            success: function (response) {
+                console.log(response);
+            },
+
+            error: function (e) {
+                console.log(e);
+            }
+
+        });
+	});
+
+
 	//open modal
 	mainNav.on('click', function(event){
 		$(event.target).is(mainNav) && mainNav.children('ul').toggleClass('is-visible');
@@ -24,7 +76,7 @@ jQuery(document).ready(function($){
 	formModal.on('click', function(event){
 		if( $(event.target).is(formModal) || $(event.target).is('.cd-close-form') ) {
 			formModal.removeClass('is-visible');
-		}	
+		}
 	});
 	//close modal when clicking the esc keyboard button
 	$(document).keyup(function(event){
@@ -43,14 +95,14 @@ jQuery(document).ready(function($){
 	$('.hide-password').on('click', function(){
 		var togglePass= $(this),
 			passwordField = togglePass.prev('input');
-		
+
 		( 'password' == passwordField.attr('type') ) ? passwordField.attr('type', 'text') : passwordField.attr('type', 'password');
 		( 'Hide' == togglePass.text() ) ? togglePass.text('Show') : togglePass.text('Hide');
 		//focus and move cursor to the end of input field
 		passwordField.putCursorAtEnd();
 	});
 
-	//show forgot-password form 
+	//show forgot-password form
 	forgotPasswordLink.on('click', function(event){
 		event.preventDefault();
 		forgot_password_selected();
@@ -88,7 +140,7 @@ jQuery(document).ready(function($){
 		formForgotPassword.addClass('is-selected');
 	}
 
-	//REMOVE THIS - it's just to show error messages 
+	//REMOVE THIS - it's just to show error messages
 	formLogin.find('input[type="submit"]').on('click', function(event){
 		event.preventDefault();
 		formLogin.find('input[type="email"]').toggleClass('has-error').next('span').toggleClass('is-visible');
