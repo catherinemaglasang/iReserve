@@ -1,7 +1,7 @@
-CREATE SEQUENCE id_customer_seq;
+
 CREATE TABLE Customer (
-  id_customer INT PRIMARY KEY,
-  email_address Varchar(50),
+  id_customer SERIAL PRIMARY KEY,
+  email_address Varchar(50) UNIQUE ,
   customer_password Varchar(50),
   fname Varchar(50),
   lname Varchar(50),
@@ -12,11 +12,10 @@ CREATE TABLE Customer (
   birthdate Varchar(50),
   is_active BOOLEAN
 );
-ALTER SEQUENCE id_customer_seq OWNED BY Customer.id_customer;
 
-CREATE SEQUENCE id_hotel_seq;
+
 CREATE TABLE Hotel (
-  hotel_id INT PRIMARY KEY,
+  hotel_id SERIAL PRIMARY KEY,
   hotel_name Varchar(50),
   description TEXT,
   email_address Varchar(50),
@@ -28,11 +27,10 @@ CREATE TABLE Hotel (
   extra TEXT,
   is_active BOOLEAN
 );
-ALTER SEQUENCE id_hotel_seq OWNED BY Hotel.hotel_id;
 
-CREATE SEQUENCE id_personnel_seq;
+
 CREATE TABLE Hotel_Personnel (
- id_personnel INT PRIMARY KEY,
+ id_personnel SERIAL PRIMARY KEY,
  fname Varchar(50),
  mname Varchar(50),
  lname Varchar(50),
@@ -40,29 +38,23 @@ CREATE TABLE Hotel_Personnel (
  is_active BOOLEAN,
  hotel_id INT REFERENCES Hotel(hotel_id)
 );
-ALTER SEQUENCE id_personnel_seq OWNED BY Hotel_Personnel.id_personnel;
 
-CREATE SEQUENCE id_recipient_seq;
 CREATE TABLE Message_recipient (
- id_msg_recipient INT PRIMARY KEY,
+ id_msg_recipient SERIAL PRIMARY KEY,
  is_read BOOLEAN,
- customer_id INT REFERENCES Customer (id_customer)
- id_hotel INT REFERENCES Customer (hotel_id)
+ customer_id INT REFERENCES Customer (id_customer),
+ id_hotel INT REFERENCES Hotel (hotel_id)
 );
-ALTER SEQUENCE id_recipient_seq OWNED BY Message_recipient.id_msg_recipient;
 
-CREATE SEQUENCE id_message_seq;
 CREATE TABLE Message(
- id_message INT PRIMARY KEY,
+ id_message SERIAL PRIMARY KEY,
  msg TEXT,
  timesent TIMESTAMP,
  msg_recipient_id INT REFERENCES Message_recipient (id_msg_recipient)
 );
-ALTER SEQUENCE id_message_seq OWNED BY Message.id_message;
 
-CREATE SEQUENCE id_transaction_seq;
 CREATE TABLE Online_Transaction (
- id_transaction INT PRIMARY KEY,
+ id_transaction SERIAL PRIMARY KEY,
  transaction_number INT,
  date_of_transaction TIMESTAMP,
  downpayment INT,
@@ -70,27 +62,21 @@ CREATE TABLE Online_Transaction (
  hotel_id INT REFERENCES Hotel(hotel_id),
  customer_id INT REFERENCES Customer (id_customer)
 );
-ALTER SEQUENCE id_transaction_seq OWNED BY Online_Transaction.id_transaction;
 
-CREATE SEQUENCE id_room_seq;
 CREATE TABLE Room (
-  id_room INT PRIMARY KEY,
+  id_room SERIAL PRIMARY KEY,
   room_number Varchar(50),
   cost INT,
   available_room INT,
   hotel_id INT references Hotel(hotel_id)
 );
-ALTER SEQUENCE id_room_seq OWNED BY Room.id_room;
 
-CREATE SEQUENCE id_type_seq;
 CREATE TABLE Type (
-  id_room_type INT PRIMARY KEY,
+  id_room_type SERIAL PRIMARY KEY,
   room_type TEXT,
   room_id INT references Room(id_room)
 );
-ALTER SEQUENCE id_type_seq OWNED BY Type.id_room_type;
 
-CREATE SEQUENCE id_feedback_seq;
 CREATE TABLE Feedback (
   feedback_id INT PRIMARY KEY,
   comment TEXT,
@@ -98,54 +84,45 @@ CREATE TABLE Feedback (
   is_active BOOLEAN,
   hotel_id INT REFERENCES Hotel(hotel_id)
 );
-ALTER SEQUENCE id_feedback_seq OWNED BY Feedback.feedback_id;
 
-CREATE SEQUENCE id_feature_seq;
 CREATE TABLE Hotel_Features (
-  hotel_features_id INT PRIMARY KEY,
+  hotel_features_id SERIAL PRIMARY KEY,
   name Varchar(250),
   hotel_id INT REFERENCES Hotel(hotel_id)
 );
-ALTER SEQUENCE id_feature_seq OWNED BY Hotel_Features.hotel_features_id;
 
-CREATE SEQUENCE id_list_seq;
 CREATE TABLE Features_list (
-  features_id INT PRIMARY KEY,
+  features_id SERIAL PRIMARY KEY,
   name Varchar(250),
   hotel_features_id INT REFERENCES Hotel_Features(hotel_features_id)
 );
-ALTER SEQUENCE id_list_seq OWNED BY Features_list.features_id;
 
-CREATE SEQUENCE id_rate_seq;
 CREATE TABLE Rating (
-  rating_id INT PRIMARY KEY,
+  rating_id SERIAL PRIMARY KEY,
   rate INT,
   Feedback_id INT REFERENCES Feedback(feedback_id)
 );
-ALTER SEQUENCE id_rate_seq OWNED BY Rating.rating_id;
 
-CREATE SEQUENCE id_image_seq;
 CREATE TABLE Image (
-  image_id INT PRIMARY KEY,
+  image_id SERIAL PRIMARY KEY,
   img Varchar(250),
   id_customer INT REFERENCES Customer(id_customer),
   hotel_id INT REFERENCES Hotel(hotel_id)
 );
-ALTER SEQUENCE id_rate_seq OWNED BY Image.image_id;
 
-create or replace function newcustomer(par_email TEXT, par_password TEXT, par_fname TEXT, par_lname TEXT,
-                                      par_contact TEXT, par_address TEXT, par_postal TEXT, par_gender INT,
-                                      par_birthdate TEXT, par_is_active BOOLEAN) returns TEXT as
+create or replace function newcustomer(par_email varchar, par_password varchar, par_fname varchar, par_lname varchar,
+                                      par_contact varchar, par_address varchar, par_postal varchar, par_gender INT,
+                                      par_birthdate varchar) returns TEXT as
 $$
   DECLARE
-    loc_id INT;
+    loc_email VARCHAR;
     loc_res TEXT;
   BEGIN
-    SELECT INTO loc_id id_customer FROM Customer WHERE email_address = par_email;
-    if loc_id isnull THEN
+    SELECT INTO loc_email email_address FROM Customer WHERE email_address = par_email;
+    if loc_email isnull THEN
 
       INSERT INTO Customer (email_address, customer_password, fname, lname, contact_number, address,
-      postal_code, gender, birthdate, is_active) VALUES (par_id, par_email, par_password, par_fname, par_lname,
+      postal_code, gender, birthdate, is_active) VALUES (par_email, par_password, par_fname, par_lname,
                                                   par_contact, par_address, par_postal, par_gender, par_birthdate, TRUE);
       loc_res = 'OK';
 
