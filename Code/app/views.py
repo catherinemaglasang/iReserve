@@ -1,10 +1,14 @@
 from app import app
 import os
-from flask import Flask, jsonify, url_for, render_template
+from flask import Flask, jsonify, url_for, render_template, request
+from flask.ext.cors import CORS
 import flask
 import sys
+from flask.ext.restful.utils.cors import crossdomain
 from flask_httpauth import HTTPBasicAuth
 from models import *
+
+CORS(app)
 
 
 def spcall(qry, param, commit=False):
@@ -20,23 +24,17 @@ def spcall(qry, param, commit=False):
         res = [("Error: " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]),)]
     return res
 
-
 @app.route("/")
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=['GET'])
 
+@app.route('/api/register/<string:email>/<string:password>/<string:fname>/<string:lname>/<string:contact>/<string:address>/<string:postal>/<string:gender>/<string:birthdate>', methods=['POST', 'GET'])
+def register(email, password, fname, lname, contact, address, postal, gender, birthdate):
+    res = spcall("newcustomer", (email, password, fname, lname, contact, address, postal, gender, birthdate), True)
 
-@app.after_request
-def add_cors(resp):
-    resp.headers['Access-Control-Allow-Origin'] = flask.request.headers.get('Origin', '*')
-    resp.headers['Access-Control-Allow-Credentials'] = True
-    resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS, GET, PUT, DELETE'
-    resp.headers['Access-Control-Allow-Headers'] = flask.request.headers.get('Access-Control-Request-Headers',
-                                                                             'Authorization')
-    # set low for debugging
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'error', 'message': res[0][0]})
 
-    if app.debug:
-        resp.headers["Access-Control-Max-Age"] = '1'
-    return resp
+    return jsonify({'status': 'ok', 'message': res[0][0]})
+
