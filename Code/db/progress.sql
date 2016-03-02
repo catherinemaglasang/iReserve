@@ -15,7 +15,7 @@ CREATE TABLE Customer (
 
 
 CREATE TABLE Hotel (
-  hotel_id SERIAL PRIMARY KEY,
+  id_hotel SERIAL PRIMARY KEY,
   hotel_name Varchar(50),
   description TEXT,
   email_address Varchar(50),
@@ -185,3 +185,15 @@ $$
   END;
 $$
   LANGUAGE 'plpgsql';
+
+
+
+create or replace function gethotel(OUT INT, OUT VARCHAR, OUT TEXT, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR,
+                                        OUT INT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS
+$$
+
+  SELECT id_hotel, hotel_name, description, email_address, address, contact_number, google_map,
+      no_of_restaurants, no_of_rooms, extra, is_active FROM Customer;
+
+$$
+  LANGUAGE 'sql';
