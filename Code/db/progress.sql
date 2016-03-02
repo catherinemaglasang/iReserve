@@ -193,7 +193,18 @@ create or replace function gethotel(OUT INT, OUT VARCHAR, OUT TEXT, OUT VARCHAR,
 $$
 
   SELECT id_hotel, hotel_name, description, email_address, address, contact_number, google_map,
-      no_of_restaurants, no_of_rooms, extra, is_active FROM Customer;
+      no_of_restaurants, no_of_rooms, extra, is_active FROM Hotel;
+
+$$
+  LANGUAGE 'sql';
+
+
+create or replace function gethotel_id(IN par_id INT, OUT VARCHAR, OUT TEXT, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR,
+                                        OUT INT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS
+$$
+
+  SELECT hotel_name, description, email_address, address, contact_number, no_of_restaurants,
+      no_of_rooms, extra, is_active FROM Hotel WHERE id_hotel = par_id;
 
 $$
   LANGUAGE 'sql';
