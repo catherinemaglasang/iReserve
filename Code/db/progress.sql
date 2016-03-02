@@ -159,3 +159,29 @@ $$
   LANGUAGE 'sql';
 
 --select * from getcustomer_id(1);
+
+
+
+create or replace function newhotel(par_hotelname varchar, par_description TEXT, par_email varchar, par_address varchar,
+                                      par_contact varchar, par_googlemap varchar, par_no_ofrestaurant INT, par_no_ofrooms INT,
+                                      par_extra TEXT) returns TEXT as
+$$
+  DECLARE
+    loc_email VARCHAR;
+    loc_res TEXT;
+  BEGIN
+    SELECT INTO loc_email email_address FROM Hotel WHERE email_address = par_email;
+    if loc_email isnull THEN
+
+      INSERT INTO Hotel (hotel_name, description, email_address, address, contact_number, google_map,
+      no_of_restaurant, no_of_rooms, extra, is_active) VALUES (par_hotelname, par_description, par_email, par_address,
+                                                  par_contact, par_googlemap, par_no_ofrestaurant, par_no_ofrooms, par_extra, TRUE);
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
