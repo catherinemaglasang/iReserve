@@ -15,7 +15,7 @@ CREATE TABLE Customer (
 
 
 CREATE TABLE Hotel (
-  hotel_id SERIAL PRIMARY KEY,
+  id_hotel SERIAL PRIMARY KEY,
   hotel_name Varchar(50),
   description TEXT,
   email_address Varchar(50),
@@ -159,3 +159,52 @@ $$
   LANGUAGE 'sql';
 
 --select * from getcustomer_id(1);
+
+
+
+create or replace function newhotel(par_hotelname varchar, par_description TEXT, par_email varchar, par_address varchar,
+                                      par_contact varchar, par_googlemap varchar, par_no_ofrestaurant INT, par_no_ofrooms INT,
+                                      par_extra TEXT) returns TEXT as
+$$
+  DECLARE
+    loc_email VARCHAR;
+    loc_res TEXT;
+  BEGIN
+    SELECT INTO loc_email email_address FROM Hotel WHERE email_address = par_email;
+    if loc_email isnull THEN
+
+      INSERT INTO Hotel (hotel_name, description, email_address, address, contact_number, google_map,
+      no_of_restaurant, no_of_rooms, extra, is_active) VALUES (par_hotelname, par_description, par_email, par_address,
+                                                  par_contact, par_googlemap, par_no_ofrestaurant, par_no_ofrooms, par_extra, TRUE);
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+
+
+create or replace function gethotel(OUT INT, OUT VARCHAR, OUT TEXT, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR,
+                                        OUT INT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS
+$$
+
+  SELECT id_hotel, hotel_name, description, email_address, address, contact_number, google_map,
+      no_of_restaurants, no_of_rooms, extra, is_active FROM Hotel;
+
+$$
+  LANGUAGE 'sql';
+
+
+create or replace function gethotel_id(IN par_id INT, OUT VARCHAR, OUT TEXT, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR,
+                                        OUT INT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS
+$$
+
+  SELECT hotel_name, description, email_address, address, contact_number, no_of_restaurants,
+      no_of_rooms, extra, is_active FROM Hotel WHERE id_hotel = par_id;
+
+$$
+  LANGUAGE 'sql';
