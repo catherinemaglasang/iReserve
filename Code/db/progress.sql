@@ -248,3 +248,24 @@ $$
   DELETE FROM Feedback WHERE feedback_id IN (SELECT feedback_id FROM Feedback WHERE feedback_id = par_feedback_id);
 $$
   LANGUAGE 'sql';
+
+create or replace function newrating(par_rating_id INT, rate INT, feedback_id INT) returns TEXT AS
+$$
+  DECLARE
+    loc_id INT;
+    loc_res TEXT;
+  BEGIN
+    SELECT INTO loc_id rating_id FROM Rating WHERE rating_id = par_rating_id;
+    if loc_id isnull THEN
+
+      INSERT INTO Rating(rating_id, rate, feedback_id) VALUES (par_rating_id, par_rate, par_feedback_id);
+      loc_res = 'OK';
+
+      ELSE
+      loc_res = 'ID EXISTED';
+      end if;
+      return loc_res;
+
+  END;
+$$
+  LANGUAGE 'plpgsql';
