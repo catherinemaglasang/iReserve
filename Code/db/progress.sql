@@ -269,3 +269,9 @@ $$
   END;
 $$
   LANGUAGE 'plpgsql';
+
+create or replace function getrating(OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+$$
+  SELECT rating_id, rate, Feedback_id FROM Rating;
+$$
+  LANGUAGE 'sql';
