@@ -230,3 +230,9 @@ $$
   END;
 $$
   LANGUAGE 'plpgsql';
+
+create or replace function getfeedback(OUT INT, OUT TEXT, OUT TIMESTAMP, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
+$$
+  SELECT feedback_id, comment, created_date, is_active, hotel_id FROM Feedback;
+$$
+  LANGUAGE 'sql';
