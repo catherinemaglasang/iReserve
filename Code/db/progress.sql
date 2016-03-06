@@ -236,3 +236,9 @@ $$
   SELECT feedback_id, comment, created_date, is_active, hotel_id FROM Feedback;
 $$
   LANGUAGE 'sql';
+
+create or replace function getfeedback_id(IN par_feedback_id INT, OUT TEXT, OUT TIMESTAMP, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
+$$
+  SELECT comment, created_date, is_active, hotel_id FROM Feedback WHERE feedback_id = par_feedback_id;
+$$
+  LANGUAGE 'sql';
