@@ -110,6 +110,10 @@ CREATE TABLE Image (
   hotel_id INT REFERENCES Hotel(hotel_id)
 );
 
+
+
+-- CUSTOMER
+
 create or replace function newcustomer(par_email varchar, par_password varchar, par_fname varchar, par_lname varchar,
                                       par_contact varchar, par_address varchar, par_postal varchar, par_gender INT,
                                       par_birthdate varchar) returns TEXT as
@@ -162,6 +166,10 @@ $$
 
 
 
+
+--HOTEL
+
+
 create or replace function newhotel(par_hotelname varchar, par_description TEXT, par_email varchar, par_address varchar,
                                       par_contact varchar, par_googlemap varchar, par_no_ofrestaurant INT, par_no_ofrooms INT,
                                       par_extra TEXT) returns TEXT as
@@ -205,6 +213,30 @@ $$
 
   SELECT hotel_name, description, email_address, address, contact_number, no_of_restaurants,
       no_of_rooms, extra, is_active FROM Hotel WHERE id_hotel = par_id;
+
+$$
+  LANGUAGE 'sql';
+
+
+
+--IMAGE
+
+
+create or replace function getimage(OUT INT, OUT VARCHAR, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+$$
+
+  SELECT image_id, img, id_customer, hotel_id FROM Image;
+
+$$
+  LANGUAGE 'sql';
+
+
+
+--FEATURES
+
+create or replace function getfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
+  $$
+    SELECT hotel_features_id, name, hotel_id FROM Hotel_Features AND Hotel;
 
 $$
   LANGUAGE 'sql';
