@@ -231,8 +231,7 @@ $$
   LANGUAGE 'sql';
 
 
-
---FEATURES
+--Hotel Features
 
 create or replace function getfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
   $$
@@ -240,3 +239,4 @@ create or replace function getfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS SET
 
 $$
   LANGUAGE 'sql';
+
