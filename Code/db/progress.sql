@@ -240,3 +240,14 @@ create or replace function getfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS SET
 $$
   LANGUAGE 'sql';
 
+
+
+--Feature List
+
+create or replace function getsubfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
+  $$
+    SELECT features_id, name, hotel_features_id from Feature_list AND Hotel_features;
+  $$
+    LANGUAGE 'sql';
+ 
+
