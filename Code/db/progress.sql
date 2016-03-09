@@ -300,6 +300,13 @@ $$
   LANGUAGE 'sql';
 
 
+create or replace function getfeature_id(IN par_id INT, OUT VARCHAR, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+$$
+
+  SELECT name, hotel_id FROM Image WHERE hotel_features_id = par_id;
+
+$$
+  LANGUAGE 'sql';
 
 --Feature List
 
