@@ -218,10 +218,34 @@ $$
   LANGUAGE 'sql';
 
 
-<<<<<<< HEAD
 
 --IMAGE
 
+
+create or replace function newimage(par_img Varchar, par_customerid Int, par_hotelid Int) returns Text as
+  $$
+    DECLARE
+      loc_img Varchar;
+      loc_res Text;
+
+    BEGIN
+      SELECT INTO loc_img img FROM Image WHERE img = par_img;
+    if loc_img isnull THEN
+
+      INSERT INTO Image (img, id_customer, hotel_id) 
+        VALUES (par_img, par_customerid, par_hotelid)
+                                                  
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+      
 
 create or replace function getimage(OUT INT, OUT VARCHAR, OUT INT, OUT INT) RETURNS SETOF RECORD AS
 $$
@@ -252,7 +276,9 @@ create or replace function getsubfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS 
     LANGUAGE 'sql';
  
 
-=======
+
+
+-- Feedback
 create or replace function newfeedback(par_feedback_id INT, par_comment TEXT, par_created_date TIMESTAMP, par_is_active BOOLEAN, par_hotel_id INT) returns TEXT AS
 $$
   DECLARE
@@ -292,6 +318,10 @@ $$
 $$
   LANGUAGE 'sql';
 
+
+
+--Rating
+
 create or replace function newrating(par_rating_id INT, rate INT, feedback_id INT) returns TEXT AS
 $$
   DECLARE
@@ -318,4 +348,4 @@ $$
   SELECT rating_id, rate, Feedback_id FROM Rating;
 $$
   LANGUAGE 'sql';
->>>>>>> daa7da21741310ed7c952110c946e667e57530fd
+
