@@ -367,4 +367,46 @@ $$
 
 --select * from getid_personnel(1);
 
+create or replace function newRoom( par_id_room varchar, par_room_number varchar, par_cost INT, par_available_room INT, Hotel.hotel_id INT) returns TEXT as
+$$
+    DECLARE 
+        loc_id_room TEXT;
+        loc_res TEXT;
+    BEGIN
+    SELECT INTO loc_id_room id_room FROM Room WHERE id_room = par_id_room;
+    if loc_id_room isnull THEN
 
+      INSERT INTO ROOM (id_room, room_number,cost, available_room, Hotel.hotel_id);
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ROOM ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+--select newRoom ('102', '102A', 1000, 5, 1);
+
+create or replace function getRoom(OUT TEXT, OUT TEXT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+
+$$
+
+  SELECT id_room, room_number, cost, available_room, Hotel.hotel_id FROM Room;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getRoom();
+
+create or replace function getid_room(IN par_id_room TEXT, OUT TEXT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+$$
+
+  SELECT room_number, cost, available_room, Hotel.hotel_id
+     FROM Room WHERE id_room = par_id_room;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getid_room(102);
