@@ -294,6 +294,31 @@ $$
 
 --Feature List
 
+
+create or replace function newsubfeature(par_name Varchar, par_hotelfeaturesid Int) returns Text as
+  $$
+    DECLARE
+      loc_name Varchar;
+      loc_res Text;
+
+    BEGIN
+      SELECT INTO loc_name name FROM Feature_list WHERE name = par_name;
+    if loc_name isnull THEN
+
+      INSERT INTO Feature_list (name, hotel_features_id) 
+        VALUES (par_name, par_hotelfeaturessid)
+                                                  
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+
 create or replace function getsubfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
   $$
     SELECT features_id, name, hotel_features_id from Feature_list AND Hotel_features;
