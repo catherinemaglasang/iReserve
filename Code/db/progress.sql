@@ -258,6 +258,31 @@ $$
 
 --Hotel Features
 
+
+create or replace function newhotelfeature(par_name Varchar, par_hotelid Int) returns Text as
+  $$
+    DECLARE
+      loc_name Varchar;
+      loc_res Text;
+
+    BEGIN
+      SELECT INTO loc_name name FROM Hotel_Features WHERE name = par_name;
+    if loc_name isnull THEN
+
+      INSERT INTO Hotel_Features (name, hotel_id) 
+        VALUES (par_name,par_hotelid)
+                                                  
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+
 create or replace function getfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
   $$
     SELECT hotel_features_id, name, hotel_id FROM Hotel_Features AND Hotel;
