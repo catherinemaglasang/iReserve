@@ -300,7 +300,7 @@ $$
   LANGUAGE 'sql';
 
 
-create or replace function getfeature_id(IN par_id INT, OUT VARCHAR, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+create or replace function getfeature_id(IN par_id INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
 $$
 
   SELECT name, hotel_id FROM Image WHERE hotel_features_id = par_id;
@@ -342,8 +342,16 @@ create or replace function getsubfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS 
     LANGUAGE 'sql';
  
 
+create or replace function getsubfeature_id(IN par_id INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
+$$
+
+  SELECT name, hotel_features_id FROM Features_list WHERE features_id = par_id;
+
+$$
+  LANGUAGE 'sql';
 
 
+  
 -- Feedback
 create or replace function newfeedback(par_feedback_id INT, par_comment TEXT, par_created_date TIMESTAMP, par_is_active BOOLEAN, par_hotel_id INT) returns TEXT AS
 $$
