@@ -256,6 +256,15 @@ $$
   LANGUAGE 'sql';
 
 
+create or replace function getimage_id(IN par_id INT, OUT VARCHAR, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+$$
+
+  SELECT img, id_customer, hotel_id FROM Image WHERE image_id = par_id;
+
+$$
+  LANGUAGE 'sql';
+
+
 --Hotel Features
 
 
