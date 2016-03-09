@@ -319,3 +319,52 @@ $$
 $$
   LANGUAGE 'sql';
 >>>>>>> daa7da21741310ed7c952110c946e667e57530fd
+
+create or replace function newHotel_Personnel( par_id_personnel varchar, par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar, par_is_active BOOLEAN,
+                                                Hotel.hotel_id INT) returns TEXT as
+$$
+    DECLARE
+        loc_id_personnel TEXT;
+        loc_res TEXT;
+    BEGIN
+    SELECT INTO loc_id_personnel id_personnel FROM Hotel_Personnel WHERE id_personnel = par_id_personnel;
+    if loc_id_personnel isnull THEN
+
+      INSERT INTO Hotel_Personnel (id_personnel, fname, mname, lname, personnel_password, is_active, Hotel.hotel_id) VALUES (par_id_personnel, par_fname, par_mname,
+                                    par_lname, par_personnel_password, TRUE, Hotel.hotel_id);
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'Personnel ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+--select newHotel_Personnel (1, 'Marjorie', 'Galabin', 'Buctolan', 'gwapa', 'TRUE', 1);
+
+create or replace function getHotel_Personnel(OUT INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
+
+$$
+
+  SELECT id_personnel, fname, mname, lname, personnel_password, is_active, Hotel.hotel_id FROM Hotel_Personnel;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getHotel_Personnel();
+
+create or replace function getid_personnel(OUT par_id_personnel TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN,
+                                        OUT INT ) RETURNS SETOF RECORD AS
+$$
+
+  SELECT fname, mname, lname, customer_password, is_active, Hotel.hotel_id
+     FROM Hotel_Personnel WHERE id_personnel = par_id_personnel;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getid_personnel(1);
+
+
