@@ -422,10 +422,7 @@ $$
   SELECT rating_id, rate, Feedback_id FROM Rating;
 $$
   LANGUAGE 'sql';
-<<<<<<< HEAD
 
-=======
->>>>>>> daa7da21741310ed7c952110c946e667e57530fd
 
 create or replace function newHotel_Personnel( par_id_personnel varchar, par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar, par_is_active BOOLEAN,
                                                 Hotel.hotel_id INT) returns TEXT as
@@ -561,4 +558,3 @@ $$
   LANGUAGE 'sql';
 
 --select * from getid_room_type(1A-1);
->>>>>>> d1a50e6f1486786a1fb8a4a18efe27001ed316a2
