@@ -112,6 +112,7 @@ CREATE TABLE Image (
 
 
 
+
 -- CUSTOMER
 
 create or replace function newcustomer(par_email varchar, par_password varchar, par_fname varchar, par_lname varchar,
@@ -216,6 +217,7 @@ $$
 
 $$
   LANGUAGE 'sql';
+
 
 
 
@@ -558,3 +560,35 @@ $$
   LANGUAGE 'sql';
 
 --select * from getid_room_type(1A-1);
+
+
+--Online Transaction
+
+create or replace function newtransaction(par_transaction_number Int, par_date Timestamp, par_downpayment Int, 
+                                          par_hotel_id Int, par_customer_id Int) returns Text as 
+$$
+  DECLARE
+    loc_transaction_number Int;
+    loc_res Text;
+
+  BEGIN
+  SELECT INTO loc_transaction_number transaction_number FROM Online_Transaction WHERE transaction_number = par_transaction_number;
+  if loc_transaction_number isnull THEN
+
+    INSERT INTO Online_Transaction(transaction_number, date_of_transaction, downpayment, is_done, hotel_id, customer_id)
+        VALUES(par_transaction_number, par_date, par_downpayment, TRUE, par_hotel_id, par_customer_id );
+        loc_res ='OK';
+
+    ELSE
+    loc_res = "Transaction exist";
+    end if;
+     return loc_res
+
+  END;
+  $$
+
+  LANGUAGE 'plpgsql';
+
+
+
+
