@@ -422,4 +422,143 @@ $$
   SELECT rating_id, rate, Feedback_id FROM Rating;
 $$
   LANGUAGE 'sql';
+<<<<<<< HEAD
 
+=======
+>>>>>>> daa7da21741310ed7c952110c946e667e57530fd
+
+create or replace function newHotel_Personnel( par_id_personnel varchar, par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar, par_is_active BOOLEAN,
+                                                Hotel.hotel_id INT) returns TEXT as
+$$
+    DECLARE
+        loc_id_personnel TEXT;
+        loc_res TEXT;
+    BEGIN
+    SELECT INTO loc_id_personnel id_personnel FROM Hotel_Personnel WHERE id_personnel = par_id_personnel;
+    if loc_id_personnel isnull THEN
+
+      INSERT INTO Hotel_Personnel (id_personnel, fname, mname, lname, personnel_password, is_active, Hotel.hotel_id) VALUES (par_id_personnel, par_fname, par_mname,
+                                    par_lname, par_personnel_password, TRUE, Hotel.hotel_id);
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'Personnel ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+--select newHotel_Personnel (1, 'Marjorie', 'Galabin', 'Buctolan', 'gwapa', 'TRUE', 1);
+
+create or replace function getHotel_Personnel(OUT INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
+
+$$
+
+  SELECT id_personnel, fname, mname, lname, personnel_password, is_active, Hotel.hotel_id FROM Hotel_Personnel;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getHotel_Personnel();
+
+create or replace function getid_personnel(OUT par_id_personnel TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN,
+                                        OUT INT ) RETURNS SETOF RECORD AS
+$$
+
+  SELECT fname, mname, lname, customer_password, is_active, Hotel.hotel_id
+     FROM Hotel_Personnel WHERE id_personnel = par_id_personnel;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getid_personnel(1);
+
+create or replace function newRoom( par_id_room varchar, par_room_number varchar, par_cost INT, par_available_room INT, Hotel.hotel_id INT) returns TEXT as
+$$
+    DECLARE 
+        loc_id_room TEXT;
+        loc_res TEXT;
+    BEGIN
+    SELECT INTO loc_id_room id_room FROM Room WHERE id_room = par_id_room;
+    if loc_id_room isnull THEN
+
+      INSERT INTO ROOM (id_room, room_number,cost, available_room, Hotel.hotel_id);
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ROOM ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+--select newRoom ('102', '102A', 1000, 5, 1);
+
+create or replace function getRoom(OUT TEXT, OUT TEXT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+
+$$
+
+  SELECT id_room, room_number, cost, available_room, Hotel.hotel_id FROM Room;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getRoom();
+
+create or replace function getid_room(IN par_id_room TEXT, OUT TEXT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+$$
+
+  SELECT room_number, cost, available_room, Hotel.hotel_id
+     FROM Room WHERE id_room = par_id_room;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getid_room(102);
+
+create or replace function newType(par_id_room_type varchar, par_room_type varchar, Room.id_room INT) return TEXT as
+$$ 
+    DECLARE
+        loc_id_room_type TEXT;
+        loc_res TEXT;
+    BEGIN
+    SELECT INTO loc_id_room_type id_room_type FROM Room WHERE id_room_type = par_id_room_type;
+    if loc_id_room_tpye isnull THEN
+
+      INSERT INTO Type (id_room_type, room_type, Room.id_room);
+      loc_res = 'OK';
+
+      ELSE
+        loc_res = 'ROOM TYPE ID EXISTED';
+      end if;
+      return loc_res;
+  END;
+$$
+  LANGUAGE 'plpgsql';
+
+--select newType ('1A-1', 'single',102);
+
+create or replace function getType(OUT TEXT, OUT TEXT, OUT INT) RETURNS SETOF RECORD AS
+
+$$
+
+  SELECT id_room_type, room_type, Room.id_room FROM Type;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getType();
+
+create or replace function getid_room_type(IN par_id_room_type TEXT, OUT TEXT, OUT INT) RETURNS SETOF RECORD AS
+$$
+
+  SELECT room_type, Room.id_room
+     FROM Type WHERE id_room_type = par_id_room_type;
+
+$$
+  LANGUAGE 'sql';
+
+--select * from getid_room_type(1A-1);
+>>>>>>> d1a50e6f1486786a1fb8a4a18efe27001ed316a2
