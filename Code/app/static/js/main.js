@@ -44,20 +44,21 @@ jQuery(document).ready(function($){
 		 var address = $("#signup-address").val();
 		 var postal = $("#signup-postal").val();
 
+		 var info = {'email': email, 'password': password, 'fname': fname, 'lname': lname, 'gender': gender, 'contact': contact, 'bday': bday, 'address': address, 'postal': postal}
 		 $.ajax({
-            url: 'http://127.0.0.1:5000/api/register' + '/' + email + '/' + password + '/' + fname + '/' + lname
-				+ '/' + contact + '/' + address + '/' + postal + '/' + gender + '/' + bday,
+            url: 'http://127.0.0.1:5000/api/register',
             type	: 'POST',
             dataType: "json",
-            contentType: 'application/json',
+			 data: JSON.stringify(info),
             success: function (response) {
+				var redirect = 'http://127.0.0.1:5000/home';
                 console.log(response);
+                formModal.removeClass('is-visible');
+				Window.location=redirect;
             },
-
             error: function (e) {
                 console.log(e);
             }
-
         });
 	});
 
