@@ -1,4 +1,4 @@
-Feature: Sign Up
+ Feature: Sign Up
   Creating an account
 
     Scenario: Signing up with correct information

@@ -1,8 +1,7 @@
 Feature: Online Payment
 
   Scenario: Online Payment
-	Given I am the customer
-	And had already logged in
+	Given i am already logged in
 	And I have a paypal account
 	When I input my email and password
 	And clicks “Send Payment”
