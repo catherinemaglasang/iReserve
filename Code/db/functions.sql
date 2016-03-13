@@ -313,6 +313,7 @@ $$
   LANGUAGE 'sql';
 
 
+--Hotel Personnel
 
 create or replace function newHotel_Personnel( par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar, par_is_active BOOLEAN,
                                                 par_hotel_id INT) returns TEXT as
@@ -365,17 +366,19 @@ $$
 --select * from getid_personnel(1);
 
 
+-- Room
 
-create or replace function newRoom( par_id_room varchar, par_room_number varchar, par_cost INT, par_available_room INT, Hotel.hotel_id INT) returns TEXT as
+create or replace function newRoom( par_room_number varchar, par_cost INT, par_available_room INT, par_hotel_id INT) returns TEXT as
 $$
     DECLARE 
-        loc_id_room TEXT;
+        loc_room_number TEXT;
         loc_res TEXT;
     BEGIN
-    SELECT INTO loc_id_room id_room FROM Room WHERE id_room = par_id_room;
-    if loc_id_room isnull THEN
+    SELECT INTO loc_room_number room_number FROM Room WHERE room_number = par_room_number;
+    if loc_room_number isnull THEN
 
-      INSERT INTO ROOM (id_room, room_number,cost, available_room, Hotel.hotel_id);
+      INSERT INTO ROOM (room_number,cost, available_room, hotel_id); VALUES (par_room_number, par_cost,
+                                    par_available_room, par_hotel_id);
       loc_res = 'OK';
 
       ELSE
@@ -388,11 +391,11 @@ $$
 
 --select newRoom ('102', '102A', 1000, 5, 1);
 
-create or replace function getRoom(OUT TEXT, OUT TEXT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+create or replace function getRoom( OUT INT, OUT INT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
 
 $$
 
-  SELECT id_room, room_number, cost, available_room, Hotel.hotel_id FROM Room;
+  SELECT id_room, room_number, cost, available_room, hotel_id FROM Room;
 
 $$
   LANGUAGE 'sql';
@@ -402,7 +405,7 @@ $$
 create or replace function getid_room(IN par_id_room TEXT, OUT TEXT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
 $$
 
-  SELECT room_number, cost, available_room, Hotel.hotel_id
+  SELECT room_number, cost, available_room, par_hotel_id
      FROM Room WHERE id_room = par_id_room;
 
 $$
