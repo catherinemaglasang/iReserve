@@ -69,3 +69,18 @@ def register():
 
     # returning a json (this will call the client side again(ajax chuchu)
     return jsonify({'status': 'ok',})
+
+@app.route('/api/hotel/', methods=['GET'])
+def get_all_hotels():
+    res = spcall('gethotel', (), True)
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'error', 'message': res[0] [0]})
+
+    recs = []
+    for r in res:
+        recs.append({"id_hotel": str(r[0]), "hotel_name": str(r[1]), "description": str(r[2]), "email_address": str(r[3]),
+                    "address": str(r[4]), "contact_number": str(r[5]),"google_map": str(r[6]), "no_of_restaurant": str(r[7]),
+                    "no_of_rooms": str(r[8]), "extra": str(r[9]), "is_active": str(r[10])})
+        
+        return jsonify({'status': 'ok', 'entries': recs, 'count': len(recs)})
