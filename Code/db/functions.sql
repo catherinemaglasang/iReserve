@@ -486,3 +486,11 @@ create or replace function gettransaction(OUT INT, OUT INT, OUT Timestamp,OUT IN
 
   $$
     LANGUAGE 'sql';
+
+
+create or replace function gettransaction_id(IN par_id INT, OUT INT, OUT Timestamp,OUT INT, OUT BOOLEAN, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+  $$
+    SELECT  transaction_number, date_of_transaction, downpayment, is_done, hotel_id, customer_id FROM Online_transaction WHERE id_transaction = par_id
+
+  $$
+    LANGUAGE 'sql';
