@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>iReserve</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <style type="text/css">
+      .avatar{
+        max-width: 250px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class="container">
+      <h1>Register</h1>
+
+      <form role="form" method="post" onsubmit="return false">
+        <div class="form-group">
+            <input type="text" class="form-control" name="email" placeholder="Enter Email" required>
+            <input type="text" class="form-control" name="password" placeholder="Password" required>
+            <input type="text" class="form-control" name="fname" placeholder="First Name" required>
+            <input type="text" class="form-control" name="lname" placeholder="Last Name" required>
+            <input type="radio" class="has-padding" name="signup-gender" value="0" checked> Male<br>
+            <input type="radio" class="has-padding" name="signup-gender" value="1"> Female<br>
+            <input type="text" class="form-control" name="number" placeholder="Contact Number" required>
+            <input type="text" class="form-control" name="birthday" placeholder="Birthday" required>
+            <input type="text" class="form-control" name="address" placeholder="Address" required>
+            <input type="text" class="form-control" name="postal" placeholder="Postal Code" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+      <br>
+
+      <div id="results">
+
+      </div>
+
+    </div>
+    <script src="{{ url_for('static', filename="jquery-1.11.0.min.js") }}"></script>
+    <script src="{{ url_for('static', filename="main.js") }}"></script>
+    <script src="{{ url_for('static', filename="bootstrap.min.js") }}"></script>
+  </body>
+</html>
