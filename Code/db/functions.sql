@@ -314,18 +314,21 @@ $$
 
 
 
-create or replace function newHotel_Personnel( par_id_personnel varchar, par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar, par_is_active BOOLEAN,
-                                                Hotel.hotel_id INT) returns TEXT as
+create or replace function newHotel_Personnel( par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar, par_is_active BOOLEAN,
+                                                par_hotel_id INT) returns TEXT as
 $$
     DECLARE
-        loc_id_personnel TEXT;
+        loc_fname TEXT;
+        loc_mname TEXT;
+        loc_lname TEXT;
         loc_res TEXT;
-    BEGIN
-    SELECT INTO loc_id_personnel id_personnel FROM Hotel_Personnel WHERE id_personnel = par_id_personnel;
-    if loc_id_personnel isnull THEN
 
-      INSERT INTO Hotel_Personnel (id_personnel, fname, mname, lname, personnel_password, is_active, Hotel.hotel_id) VALUES (par_id_personnel, par_fname, par_mname,
-                                    par_lname, par_personnel_password, TRUE, Hotel.hotel_id);
+    BEGIN
+    SELECT INTO loc_fname fname, loc_mname fname, loc_lname lname FROM Hotel_Personnel WHERE fname = par_fname, mname = par_mname, lname = par_fname;
+    if loc_fname, loc_mname, loc_lname isnull THEN
+
+      INSERT INTO Hotel_Personnel (fname, mname, lname, personnel_password, is_active, par_hotel_id) VALUES (par_fname, par_mname,
+                                    par_lname, par_personnel_password, TRUE, par_hotel_id);
       loc_res = 'OK';
 
       ELSE
@@ -342,24 +345,26 @@ create or replace function getHotel_Personnel(OUT INT, OUT TEXT, OUT TEXT, OUT T
 
 $$
 
-  SELECT id_personnel, fname, mname, lname, personnel_password, is_active, Hotel.hotel_id FROM Hotel_Personnel;
+  SELECT id_personnel, fname, mname, lname, personnel_password, is_active, hotel_id FROM Hotel_Personnel;
 
 $$
   LANGUAGE 'sql';
 
 --select * from getHotel_Personnel();
 
-create or replace function getid_personnel(OUT par_id_personnel TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN,
+create or replace function getid_personnel( IN par_id INT, OUT fname TEXT, OUT mname TEXT, OUT lname TEXT, OUT TEXT, OUT BOOLEAN,
                                         OUT INT ) RETURNS SETOF RECORD AS
 $$
 
-  SELECT fname, mname, lname, customer_password, is_active, Hotel.hotel_id
-     FROM Hotel_Personnel WHERE id_personnel = par_id_personnel;
+  SELECT fname, mname, lname, personnel_password, is_active, hotel_id
+     FROM Hotel_Personnel WHERE id_personnel = par_id;
 
 $$
   LANGUAGE 'sql';
 
 --select * from getid_personnel(1);
+
+
 
 create or replace function newRoom( par_id_room varchar, par_room_number varchar, par_cost INT, par_available_room INT, Hotel.hotel_id INT) returns TEXT as
 $$
