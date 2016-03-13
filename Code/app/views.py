@@ -98,3 +98,22 @@ def gethotel(id_hotel):
                     "address": str(rec[3]), "contact_number": str(rec[4]),"google_map": str(rec[5]), "no_of_restaurant": str(rec[6]),
                     "no_of_rooms": str(rec[7]), "extra": str(rec[8]), "is_active": str(rec[9])})
 
+@app.route('/api/hotel', methods=['POST'])
+def newhotel():
+    req = request.json
+    id_hotel = req['id_hotel']
+    hotel_name = req['hotel_name']
+    description = req['description']
+    email_address = req['email_address']
+    address = req['address']
+    contact_number = req['contact_number']
+    google_map = req['google_map']
+    no_of_restaurant = req['no_of_restaurant']
+    no_of_rooms = req['no_of_rooms']
+    extra = req['extra']
+    res = spcall('newhotel', (id_hotel, hotel_name, description, email_address, address, contact_number, google_map, no_of_restaurant,
+                               no_of_rooms, extra), True)
+
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'error', 'message': res[0][0]})
+    return jsonify({'status': 'ok', 'message': res[0][0]})
