@@ -34,11 +34,11 @@ def index():
 def home():
     return render_template('home.html')
 
-@app.route('/api/register', methods=['POST', 'GET'])
+@app.route('/api/register', methods=['POST'])
 def register():
     req = request.json
 
-    res = spcall("newcustomer", (req['email'], req['password'], req['fname'], req['lname'],
+    res = spcall("newcustomer", (id,req['email'], req['password'], req['fname'], req['lname'],
                                  req['contact'], req['address'], req['postal'], req['gender'],
                                  req['bday']), True)
 
@@ -46,4 +46,6 @@ def register():
         return jsonify({'status': 'error', 'message': res[0][0]})
 
     return jsonify({'status': 'ok', 'message': res[0][0]})
+
+
 

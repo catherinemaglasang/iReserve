@@ -1,3 +1,4 @@
+<<<<<<< HEAD:Code/db/progress.sql
 
 CREATE TABLE Customer (
   id_customer SERIAL PRIMARY KEY,
@@ -113,6 +114,8 @@ CREATE TABLE Image (
 
 
 
+=======
+>>>>>>> b734f4f6d037b2d6c4b587b993fa60d4bf84e60e:Code/db/functions.sql
 -- CUSTOMER
 
 create or replace function newcustomer(par_email varchar, par_password varchar, par_fname varchar, par_lname varchar,
@@ -139,7 +142,7 @@ $$
 $$
   LANGUAGE 'plpgsql';
 
---select newcustomer (1, 'koneb2013@gmail.com', 'asdasd', 'Neiell Care', 'Paradiang', '09263555557', 'Iligan City', '9200', 1, 'AUGUST-20-1995', TRUE);
+--select newcustomer ('koneb2013@gmail.com', 'asdasd', 'Neiell Care', 'Paradiang', '09263555557', 'Iligan City', '9200', 1, 'AUGUST-20-1995');
 
 create or replace function getcustomer(OUT INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT,
                                         OUT TEXT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS
@@ -219,7 +222,10 @@ $$
   LANGUAGE 'sql';
 
 
+<<<<<<< HEAD:Code/db/progress.sql
 
+=======
+>>>>>>> b734f4f6d037b2d6c4b587b993fa60d4bf84e60e:Code/db/functions.sql
 
 --IMAGE
 
@@ -342,8 +348,8 @@ create or replace function getsubfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS 
     SELECT features_id, name, hotel_features_id from Feature_list AND Hotel_features;
   $$
     LANGUAGE 'sql';
- 
 
+<<<<<<< HEAD:Code/db/progress.sql
 create or replace function getsubfeature_id(IN par_id INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
 $$
 
@@ -355,6 +361,9 @@ $$
 
   
 -- Feedback
+=======
+
+>>>>>>> b734f4f6d037b2d6c4b587b993fa60d4bf84e60e:Code/db/functions.sql
 create or replace function newfeedback(par_feedback_id INT, par_comment TEXT, par_created_date TIMESTAMP, par_is_active BOOLEAN, par_hotel_id INT) returns TEXT AS
 $$
   DECLARE
@@ -424,6 +433,7 @@ $$
   SELECT rating_id, rate, Feedback_id FROM Rating;
 $$
   LANGUAGE 'sql';
+<<<<<<< HEAD:Code/db/progress.sql
 
 
 create or replace function newHotel_Personnel( par_id_personnel varchar, par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar, par_is_active BOOLEAN,
@@ -592,3 +602,5 @@ $$
 
 
 
+=======
+>>>>>>> b734f4f6d037b2d6c4b587b993fa60d4bf84e60e:Code/db/functions.sql
