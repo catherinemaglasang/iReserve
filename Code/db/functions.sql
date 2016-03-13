@@ -1,121 +1,5 @@
-<<<<<<< HEAD:Code/db/progress.sql
-
-CREATE TABLE Customer (
-  id_customer SERIAL PRIMARY KEY,
-  email_address Varchar(50) UNIQUE ,
-  customer_password Varchar(50),
-  fname Varchar(50),
-  lname Varchar(50),
-  contact_number Varchar(50),
-  address Varchar(50),
-  postal_code Varchar(50),
-  gender INT,
-  birthdate Varchar(50),
-  is_active BOOLEAN
-);
 
 
-CREATE TABLE Hotel (
-  id_hotel SERIAL PRIMARY KEY,
-  hotel_name Varchar(50),
-  description TEXT,
-  email_address Varchar(50),
-  address Varchar(250),
-  contact_number Varchar(50),
-  google_map Varchar(255),
-  no_of_restaurant INT,
-  no_of_rooms INT,
-  extra TEXT,
-  is_active BOOLEAN
-);
-
-
-CREATE TABLE Hotel_Personnel (
- id_personnel SERIAL PRIMARY KEY,
- fname Varchar(50),
- mname Varchar(50),
- lname Varchar(50),
- personnel_password Varchar(50),
- is_active BOOLEAN,
- hotel_id INT REFERENCES Hotel(hotel_id)
-);
-
-CREATE TABLE Message_recipient (
- id_msg_recipient SERIAL PRIMARY KEY,
- is_read BOOLEAN,
- customer_id INT REFERENCES Customer (id_customer),
- id_hotel INT REFERENCES Hotel (hotel_id)
-);
-
-CREATE TABLE Message(
- id_message SERIAL PRIMARY KEY,
- msg TEXT,
- timesent TIMESTAMP,
- msg_recipient_id INT REFERENCES Message_recipient (id_msg_recipient)
-);
-
-CREATE TABLE Online_Transaction (
- id_transaction SERIAL PRIMARY KEY,
- transaction_number INT,
- date_of_transaction TIMESTAMP,
- downpayment INT,
- is_done BOOLEAN,
- hotel_id INT REFERENCES Hotel(hotel_id),
- customer_id INT REFERENCES Customer (id_customer)
-);
-
-CREATE TABLE Room (
-  id_room SERIAL PRIMARY KEY,
-  room_number Varchar(50),
-  cost INT,
-  available_room INT,
-  hotel_id INT references Hotel(hotel_id)
-);
-
-CREATE TABLE Type (
-  id_room_type SERIAL PRIMARY KEY,
-  room_type TEXT,
-  room_id INT references Room(id_room)
-);
-
-CREATE TABLE Feedback (
-  feedback_id SERIAL PRIMARY KEY,
-  comment TEXT,
-  created_date TIMESTAMP,
-  is_active BOOLEAN,
-  hotel_id INT REFERENCES Hotel(hotel_id)
-);
-
-CREATE TABLE Hotel_Features (
-  hotel_features_id SERIAL PRIMARY KEY,
-  name Varchar(250),
-  hotel_id INT REFERENCES Hotel(hotel_id)
-);
-
-CREATE TABLE Features_list (
-  features_id SERIAL PRIMARY KEY,
-  name Varchar(250),
-  hotel_features_id INT REFERENCES Hotel_Features(hotel_features_id)
-);
-
-CREATE TABLE Rating (
-  rating_id SERIAL PRIMARY KEY,
-  rate INT,
-  Feedback_id INT REFERENCES Feedback(feedback_id)
-);
-
-CREATE TABLE Image (
-  image_id SERIAL PRIMARY KEY,
-  img Varchar(250),
-  id_customer INT REFERENCES Customer(id_customer),
-  hotel_id INT REFERENCES Hotel(hotel_id)
-);
-
-
-
-
-=======
->>>>>>> b734f4f6d037b2d6c4b587b993fa60d4bf84e60e:Code/db/functions.sql
 -- CUSTOMER
 
 create or replace function newcustomer(par_email varchar, par_password varchar, par_fname varchar, par_lname varchar,
@@ -145,7 +29,7 @@ $$
 --select newcustomer ('koneb2013@gmail.com', 'asdasd', 'Neiell Care', 'Paradiang', '09263555557', 'Iligan City', '9200', 1, 'AUGUST-20-1995');
 
 create or replace function getcustomer(OUT INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT,
-                                        OUT TEXT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS
+                                        OUT TEXT, OUT INT, OUT TEXT, OUT BOOLEAN) RETURNS SETOF RECORD AS\
 $$
 
   SELECT id_customer, email_address, customer_password, fname, lname, contact_number, address,
@@ -222,10 +106,6 @@ $$
   LANGUAGE 'sql';
 
 
-<<<<<<< HEAD:Code/db/progress.sql
-
-=======
->>>>>>> b734f4f6d037b2d6c4b587b993fa60d4bf84e60e:Code/db/functions.sql
 
 --IMAGE
 
@@ -349,7 +229,6 @@ create or replace function getsubfeature(OUT INT, OUT VARCHAR, OUT INT) RETURNS 
   $$
     LANGUAGE 'sql';
 
-<<<<<<< HEAD:Code/db/progress.sql
 create or replace function getsubfeature_id(IN par_id INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
 $$
 
@@ -361,9 +240,8 @@ $$
 
   
 -- Feedback
-=======
 
->>>>>>> b734f4f6d037b2d6c4b587b993fa60d4bf84e60e:Code/db/functions.sql
+
 create or replace function newfeedback(par_feedback_id INT, par_comment TEXT, par_created_date TIMESTAMP, par_is_active BOOLEAN, par_hotel_id INT) returns TEXT AS
 $$
   DECLARE
@@ -433,7 +311,7 @@ $$
   SELECT rating_id, rate, Feedback_id FROM Rating;
 $$
   LANGUAGE 'sql';
-<<<<<<< HEAD:Code/db/progress.sql
+
 
 
 create or replace function newHotel_Personnel( par_id_personnel varchar, par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar, par_is_active BOOLEAN,
@@ -602,5 +480,9 @@ $$
 
 
 
-=======
->>>>>>> b734f4f6d037b2d6c4b587b993fa60d4bf84e60e:Code/db/functions.sql
+create or replace function gettransaction(OUT INT, OUT INT, OUT Timestamp,OUT INT, OUT BOOLEAN, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+  $$
+    SELECT id_transaction, transaction_number, date_of_transaction, downpayment, is_done, hotel_id, customer_id FROM Online_transaction
+
+  $$
+    LANGUAGE 'sql';
