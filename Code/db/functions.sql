@@ -1,8 +1,8 @@
 -- CUSTOMER
 
 create or replace function newcustomer(par_email varchar, par_password varchar, par_fname varchar, par_lname varchar,
-                                      par_contact varchar, par_address varchar, par_postal varchar, par_gender INT,
-                                      par_birthdate varchar) returns TEXT as
+                                      par_gender INT, par_contact varchar, par_birthdate varchar, par_address varchar, par_postal varchar
+                                      ) returns TEXT as
 $$
   DECLARE
     loc_email VARCHAR;
