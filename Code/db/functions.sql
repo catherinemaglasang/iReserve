@@ -413,16 +413,18 @@ $$
 
 --select * from getid_room(102);
 
-create or replace function newType(par_id_room_type varchar, par_room_type varchar, Room.id_room INT) return TEXT as
+--Type
+
+create or replace function newType( par_room_type varchar, par_id_room INT) returns TEXT as
 $$ 
     DECLARE
-        loc_id_room_type TEXT;
+        loc_room_type TEXT;
         loc_res TEXT;
     BEGIN
-    SELECT INTO loc_id_room_type id_room_type FROM Room WHERE id_room_type = par_id_room_type;
+    SELECT INTO loc_room_type room_type FROM Room WHERE room_type = par_room_type;
     if loc_id_room_tpye isnull THEN
 
-      INSERT INTO Type (id_room_type, room_type, Room.id_room);
+      INSERT INTO Type (id_room_type, room_type, par_id_room);
       loc_res = 'OK';
 
       ELSE
@@ -439,7 +441,7 @@ create or replace function getType(OUT TEXT, OUT TEXT, OUT INT) RETURNS SETOF RE
 
 $$
 
-  SELECT id_room_type, room_type, Room.id_room FROM Type;
+  SELECT id_room_type, room_type, par_id_room FROM Type AND Room;
 
 $$
   LANGUAGE 'sql';
@@ -449,8 +451,8 @@ $$
 create or replace function getid_room_type(IN par_id_room_type TEXT, OUT TEXT, OUT INT) RETURNS SETOF RECORD AS
 $$
 
-  SELECT room_type, Room.id_room
-     FROM Type WHERE id_room_type = par_id_room_type;
+  SELECT room_type, par_id_room
+     FROM Type AND Room WHERE id_room_type = par_id_room_type;
 
 $$
   LANGUAGE 'sql';
