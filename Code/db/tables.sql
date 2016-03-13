@@ -9,7 +9,7 @@ CREATE TABLE Customer (
   postal_code Varchar(50),
   gender INT,
   birthdate Varchar(50),
-  is_active BOOLEAN
+  is_active BOOLEAN DEFAULT FALSE
 );
 
 
