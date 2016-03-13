@@ -84,3 +84,17 @@ def get_all_hotels():
                     "no_of_rooms": str(r[8]), "extra": str(r[9]), "is_active": str(r[10])})
         
         return jsonify({'status': 'ok', 'entries': recs, 'count': len(recs)})
+
+@app.route('/api/hotel/<id_hotel>/', methods=['GET'])
+def gethotel(id_hotel):
+    req = request.json
+    res = spcall('gethotel', (id_hotel), True)
+
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'error', 'message': res[0][0]})
+       
+    rec = res[0]
+    return jsonify({'id_hotel': str(id_hotel), "hotel_name": str(rec[0]), "description": str(rec[1]), "email_address": str(rec[2]),
+                    "address": str(rec[3]), "contact_number": str(rec[4]),"google_map": str(rec[5]), "no_of_restaurant": str(rec[6]),
+                    "no_of_rooms": str(rec[7]), "extra": str(rec[8]), "is_active": str(rec[9])})
+
