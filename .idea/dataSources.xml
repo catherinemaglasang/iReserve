@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="3687842369">
+    <data-source source="LOCAL" name="PostgreSQL - iReservedb@localhost" uuid="2bdf8720-0958-40e3-af57-35eee3f49390">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/iReservedb</jdbc-url>
+    </data-source>
+  </component>
+</project>
