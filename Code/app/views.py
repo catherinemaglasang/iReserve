@@ -34,8 +34,9 @@ def index():
 def home():
     return render_template('home.html')
 
-@app.route('/api/register', methods=['POST', 'GET'])
+@app.route('/api/register', methods=['POST'])
 def register():
+
 
     # get all the input values for client side
     value_one = request.form.get('first')
@@ -47,6 +48,10 @@ def register():
     value_seven = request.form.get('seventh')
     value_eight = request.form.get('eighth')
     value_nine = request.form.get('ninth')
+
+    res = spcall("newcustomer", (id,req['email'], req['password'], req['fname'], req['lname'],
+                                 req['contact'], req['address'], req['postal'], req['gender'],
+                                 req['bday']), True)
 
     # store all the collected values(from client side) to database using stored proc
     res = spcall("newcustomer", (value_one, value_two, value_three, value_four,
