@@ -14,13 +14,13 @@ angular.module('myApp').factory('AuthService',
                 }
             }
 
-            function login(email, password) {
+            function login(lname, password) {
 
                 // create a new instance of deferred
                 var deferred = $q.defer();
 
                 // send a post request to the server
-                $http.post('/api/login', {email: email, password: password})
+                $http.post('/api/v1.0/hotel_personnel/login', {lname: lname, password: password})
                     // handle success
                     .success(function (data, status) {
                         if (status === 200 && data.result) {
@@ -65,14 +65,13 @@ angular.module('myApp').factory('AuthService',
 
             }
 
-            function register(email, password, fname, lname, contact, address, postal, gender, birthdate) {
+            function register(password, fname, mname, lname) {
 
                 // create a new instance of deferred
                 var deferred = $q.defer();
 
                 // send a post request to the server
-                $http.post('/api/register', {email: email, password: password, fname: fname, lname: lname, contact: contact,
-                        address: address, postal: postal, gender: gender, birthdate: birthdate})
+                $http.post('/api/v1.0/hotel_personnel/register', {password: password, fname: fname, mname: mname, lname: lname})
                     // handle success
                     .success(function (data, status) {
                         if (status === 200 && data.result) {
