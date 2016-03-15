@@ -39,7 +39,7 @@ CREATE TABLE Room (
   id_room SERIAL PRIMARY KEY,
   room_number Varchar(50),
   cost INT,
-  available_room INT,
+  room_type Varchar(50),
   hotel_id INT references Hotel(id_hotel)
 );
 
