@@ -38,7 +38,7 @@ def home():
 def register():
     req = request.json
 
-    res = spcall("newcustomer", (id,req['email'], req['password'], req['fname'], req['lname'],
+    res = spcall("newcustomer", (req['email'], req['password'], req['fname'], req['lname'],
                                  req['contact'], req['address'], req['postal'], req['gender'],
                                  req['bday']), True)
 
@@ -47,5 +47,29 @@ def register():
 
     return jsonify({'status': 'ok', 'message': res[0][0]})
 
+
+
+# @app.route('/api/features', methods=['POST'])
+# def features():
+#     req = request.json
+
+#     res = spcall("newhotelfeature", (req['name'])
+
+#     if 'Error' in res[0][0]:
+#         return jsonify({'status': 'error', 'message': res[0][0]})
+
+#     return jsonify({'status': 'ok', 'message': res[0][0]})
+
+
+# @app.route('/api/subfeatures', methods=['POST'])
+# def subfeatures():
+#     req = request.json
+
+#     res = spcall("newsubfeature", (req['name'])
+
+#     if 'Error' in res[0][0]:
+#         return jsonify({'status': 'error', 'message': res[0][0]})
+
+#     return jsonify({'status': 'ok', 'message': res[0][0]})
 
 
