@@ -8,3 +8,6 @@ class BaseConfig(object):
     SECRET_KEY = 'ASk293dSJSL12ncxhsS'
     DEBUG = True
     BCRYPT_LOG_ROUNDS = 13
+
+    IPN_URLSTRING = 'https://www.sandbox.paypal.com/cgi-bin/webscr'
+    IPN_VERIFY_EXTRA_PARAMS = (('cmd', '_notify-validate'),)
