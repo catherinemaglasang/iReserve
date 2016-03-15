@@ -27,12 +27,13 @@ CREATE TABLE Hotel_Personnel (
 
 
 CREATE TABLE Transaction (
- id_transaction SERIAL PRIMARY KEY,
- transaction_number INT,
- date_of_transaction TIMESTAMP,
- fee INT,
- is_done BOOLEAN,
- hotel_id INT REFERENCES Hotel(id_hotel),
+  id_transaction      SERIAL PRIMARY KEY,
+  transaction_number  INT,
+  date_of_transaction TIMESTAMP,
+  fee                 INT,
+  is_done             BOOLEAN,
+  hotel_id            INT REFERENCES Hotel (id_hotel)
+);
  
 
 CREATE TABLE Room (
