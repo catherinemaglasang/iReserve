@@ -30,7 +30,7 @@ CREATE TABLE Transaction (
  id_transaction SERIAL PRIMARY KEY,
  transaction_number INT,
  date_of_transaction TIMESTAMP,
- downpayment INT,
+ fee INT,
  is_done BOOLEAN,
  hotel_id INT REFERENCES Hotel(id_hotel),
  
@@ -39,12 +39,12 @@ CREATE TABLE Room (
   id_room SERIAL PRIMARY KEY,
   room_number Varchar(50),
   cost INT,
-  available_room INT,
   hotel_id INT references Hotel(id_hotel)
 );
 
 CREATE TABLE Feedback (
   feedback_id SERIAL PRIMARY KEY,
+  name Varchar(50),
   comment TEXT,
   created_date TIMESTAMP,
   is_active BOOLEAN,
