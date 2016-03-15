@@ -146,43 +146,45 @@ LANGUAGE 'sql';
 
 --select * from getid_personnel(1);
 
-create or replace function newRoom( par_id_room varchar, par_room_number varchar, par_cost INT, par_available_room INT, Hotel.hotel_id INT) returns TEXT as
+create or replace function newroom(par_room_number varchar, par_cost INT, par_room_type Varchar, par_hotel_id INT) returns TEXT as
 $$
     DECLARE 
-        loc_id_room TEXT;
+        loc_room_number TEXT;
         loc_res TEXT;
     BEGIN
-    SELECT INTO loc_id_room id_room FROM Room WHERE id_room = par_id_room;
-    if loc_id_room isnull THEN
+    SELECT INTO loc_room_number par_room_number FROM Room WHERE room_number = par_room_number;
+    if loc_room_number isnull THEN
 
-      INSERT INTO ROOM (id_room, room_number,cost, available_room, Hotel.hotel_id);
+      INSERT INTO ROOM (room_number,cost, room_type, hotel_id) VALUES
+      (par_room_number, par_cost, par_room_type, par_hotel_id);
       loc_res = 'OK';
 
       ELSE
-        loc_res = 'ROOM ID EXISTED';
+        loc_res = 'ID EXISTED';
       end if;
       return loc_res;
   END;
 $$
   LANGUAGE 'plpgsql';
 
---select newRoom ('102', '102A', 1000, 5, 1);
 
-create or replace function getRoom(OUT TEXT, OUT TEXT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+--select newroom('200', 2000, 'twin-bed', 1);
+
+create or replace function getroom(OUT Int,OUT Varchar, OUT Int, OUT varchar, OUT INT) RETURNS SETOF RECORD AS
 
 $$
 
-  SELECT id_room, room_number, cost, available_room, Hotel.hotel_id FROM Room;
+  SELECT id_room, room_number, cost, room_type, hotel_id FROM Room;
 
 $$
   LANGUAGE 'sql';
 
 --select * from getRoom();
 
-create or replace function getid_room(IN par_id_room TEXT, OUT TEXT, OUT INT, OUT INT, OUT INT) RETURNS SETOF RECORD AS
+create or replace function getid_room(IN par_id_room Int, OUT varchar, OUT INT, OUT VARCHAR, OUT INT) RETURNS SETOF RECORD AS
 $$
 
-  SELECT room_number, cost, available_room, Hotel.hotel_id
+  SELECT room_number, cost, room_type, hotel_id 
      FROM Room WHERE id_room = par_id_room;
 
 $$

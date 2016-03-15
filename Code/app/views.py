@@ -48,28 +48,43 @@ def register():
     return jsonify({'status': 'ok', 'message': res[0][0]})
 
 
+ROOMS = {}
+@app.route('/api/room/', methods=['POST'])
+def add_room():
 
-# @app.route('/api/features', methods=['POST'])
-# def features():
-#     req = request.json
+    res = spcall("newroom", (request.json['room_number'], request.json['cost'],request.json['room_type'], request.json['hotel_id']))
 
-#     res = spcall("newhotelfeature", (req['name'])
+    if len(res) == 0:
+        return "Query error - Adding room"
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'error', 'message': res[0][0]})
 
-#     if 'Error' in res[0][0]:
-#         return jsonify({'status': 'error', 'message': res[0][0]})
-
-#     return jsonify({'status': 'ok', 'message': res[0][0]})
-
-
-# @app.route('/api/subfeatures', methods=['POST'])
-# def subfeatures():
-#     req = request.json
-
-#     res = spcall("newsubfeature", (req['name'])
-
-#     if 'Error' in res[0][0]:
-#         return jsonify({'status': 'error', 'message': res[0][0]})
-
-#     return jsonify({'status': 'ok', 'message': res[0][0]})
+    return jsonify({'status': 'ok', 'message': res[0][0]})
 
 
+
+@app.route('/api/room/<id>/', methods=['GET'])
+def get_roomid(id):
+
+    res = spcall('getid_room', (id))
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'error', 'message': res[0][0]})
+
+    recs = res[0]
+    
+    return jsonify({'room_number' : str(recs[0]), 'cost': str(recs[1]), 'room_type': str(recs[2])})
+
+
+@app.route('/api/room/', methods=['GET'])
+def get_rooms():
+
+    res = spcall('getroom', ())
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({"id": int(r[0]), "room_number": r[1], "room_type": str(r[2]), "cost": r[4]})
+    return jsonify({'status': 'ok', 'entries': recs, 'count': len(recs)})

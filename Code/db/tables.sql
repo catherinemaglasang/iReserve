@@ -40,6 +40,10 @@ CREATE TABLE Room (
   id_room SERIAL PRIMARY KEY,
   room_number Varchar(50),
   cost INT,
+<<<<<<< HEAD
+  room_type Varchar(50),
+=======
+>>>>>>> d8de2fae64e506267332c051901f495468d0f76f
   hotel_id INT references Hotel(id_hotel)
 );
 
