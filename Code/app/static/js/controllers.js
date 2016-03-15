@@ -9,7 +9,7 @@ angular.module('myApp').controller('loginController',
       $scope.disabled = true;
 
       // call login from service
-      AuthService.login($scope.loginForm.email, $scope.loginForm.password)
+      AuthService.login($scope.loginForm.surname, $scope.loginForm.password)
         // handle success
         .then(function () {
           $location.path('/');
@@ -56,15 +56,11 @@ angular.module('myApp').controller('registerController',
       $scope.disabled = true;
 
       // call register from service
-      AuthService.register($scope.registerForm.email,
-                           $scope.registerForm.password,
+      AuthService.register( $scope.registerForm.password,
                             $scope.registerForm.fname,
-                            $scope.registerForm.lname,
-                            $scope.registerForm.contact,
-                            $scope.registerForm.address,
-                            $scope.registerForm.postal,
-                            $scope.registerForm.gender,
-                            $scope.registerForm.birthdate)
+                            $scope.registerForm.mname,
+                            $scope.registerForm.lname)
+
         // handle success
         .then(function () {
           $location.path('/login');
