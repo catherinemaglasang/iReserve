@@ -96,53 +96,51 @@ $$
 
 
 
-
-CREATE OR REPLACE FUNCTION newHotel_Personnel(par_fname              VARCHAR, par_mname VARCHAR, par_lname VARCHAR,
-                                              par_personnel_password VARCHAR,
-                                              par_hotel_id           INT)
-  RETURNS TEXT AS
+-- Hotel Personnel
+create or replace function newHotel_Personnel(par_email varchar, par_fname varchar, par_mname varchar, par_lname varchar, par_personnel_password varchar,
+                                                par_hotel_id INT) returns TEXT as
 $$
     DECLARE
-        loc_id_personnel TEXT;
+        loc_email_address TEXT;
         loc_res TEXT;
     BEGIN
-    SELECT INTO loc_id_personnel id_personnel FROM Hotel_Personnel WHERE fname = par_fname AND lname = par_lname;
-    if loc_id_personnel isnull THEN
+    SELECT INTO loc_email_address email_address FROM Hotel_Personnel WHERE email_address = par_email;
+    if loc_email_address isnull THEN
 
-      INSERT INTO Hotel_Personnel (fname, mname, lname, personnel_password, is_active, hotel_id) VALUES (par_fname, par_mname,
-                                    par_lname, par_personnel_password, TRUE, par_hotel_id);
+      INSERT INTO Hotel_Personnel (email_address, fname, mname, lname, personnel_password, is_active, hotel_id)
+                                    VALUES (par_email, par_fname, par_mname, par_lname, par_personnel_password, TRUE, par_hotel_id);
       loc_res = 'OK';
 
       ELSE
-        loc_res = 'Personnel ID EXISTED';
+        loc_res = 'Personnel EXISTED';
       end if;
       return loc_res;
   END;
 $$
-LANGUAGE 'plpgsql';
---select newHotel_Personnel (1, 'Marjorie', 'Galabin', 'Buctolan', 'gwapa', 'TRUE', 1);
+  LANGUAGE 'plpgsql';
 
-create or replace function getHotel_Personnel(OUT INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
+--select newHotel_Personnel ('pabillarankristel@ymail.com', 'Kristel', 'Daligdig', 'Pabillaran', 'asdasd', 1);
+
+create or replace function getHotel_Personnel(OUT INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
 
 $$
 
-  SELECT id_personnel, fname, mname, lname, personnel_password, is_active, hotel_id FROM Hotel_Personnel;
+  SELECT id_personnel, email_address, fname, mname, lname, personnel_password, is_active, hotel_id FROM Hotel_Personnel;
 
 $$
   LANGUAGE 'sql';
 
 --select * from getHotel_Personnel();
 
-CREATE OR REPLACE FUNCTION getid_personnel(OUT INT, IN par_lname VARCHAR, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN,
-                                           OUT INT)
-  RETURNS SETOF RECORD AS
+create or replace function getid_personnel(IN par_id_personnel INT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT TEXT, OUT BOOLEAN,
+                                        OUT INT ) RETURNS SETOF RECORD AS
 $$
 
-  SELECT id_personnel, fname, mname, personnel_password, is_active, hotel_id
-     FROM Hotel_Personnel WHERE lower(lname) = lower(par_lname);
+  SELECT email_address, fname, mname, lname, personnel_password, is_active, hotel_id
+     FROM Hotel_Personnel WHERE id_personnel = par_id_personnel;
 
 $$
-LANGUAGE 'sql';
+  LANGUAGE 'sql';
 
 --select * from getid_personnel(1);
 
