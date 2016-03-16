@@ -16,6 +16,7 @@ CREATE TABLE Hotel (
 
 CREATE TABLE Hotel_Personnel (
  id_personnel SERIAL PRIMARY KEY,
+ email_address varchar(50) UNIQUE,
  fname Varchar(50),
  mname Varchar(50),
  lname Varchar(50),
@@ -23,7 +24,6 @@ CREATE TABLE Hotel_Personnel (
  is_active BOOLEAN,
  hotel_id INT REFERENCES Hotel(id_hotel)
 );
-
 
 
 CREATE TABLE Transaction (
@@ -40,10 +40,7 @@ CREATE TABLE Room (
   id_room SERIAL PRIMARY KEY,
   room_number Varchar(50),
   cost INT,
-<<<<<<< HEAD
   room_type Varchar(50),
-=======
->>>>>>> d8de2fae64e506267332c051901f495468d0f76f
   hotel_id INT references Hotel(id_hotel)
 );
 
