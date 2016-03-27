@@ -1,12 +1,14 @@
-Feature: Retrieve room's details
+Feature: Adding, Updating, and Retrieving room details
 
-Scenario: Retrieve room's details
-		Given some rooms are in the system
-		When I retrieve the room with an id number '1'
-		Then I should get a '200' response
-		And the following room details are returned:
-		| room_number | cost | room_type |
-		| 209 | 2000 | one bed |
+
+Scenario: Adding a new room 
+		Given I input the following room details:
+		| room_number | cost | room_type | hotel_id | 
+	    | 120 | 3000 | one-bed | 1 | 
+        When I click the add button
+        Then the room is added in the system
+        And it should have a field "message" containing "OK"
+        And it should have a field "status" containing "ok"
 
 	
 
