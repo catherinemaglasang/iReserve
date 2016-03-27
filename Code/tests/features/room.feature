@@ -33,3 +33,11 @@ Scenario: Adding a room that has the field room_type empty
 	    When i click the add button
 	    Then i should '200' response 
 	    And a message "error" are returned
+
+Scenario: Adding a room that has the field room_number and room_type empty
+		Given I input the following room details:
+		| room_number | cost | room_type | hotel_id | 
+	    |  | 4500 | | 1 | 
+	    When i click the add button
+	    Then i should '200' response 
+	    And a message "error" are returned
