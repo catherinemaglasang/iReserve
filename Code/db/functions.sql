@@ -198,6 +198,21 @@ $$
 
 --select * from getid_room(102);
 
+create or replace function updateroom(par_id_room int, par_room_number varchar, par_cost INT, par_room_type varchar) returns void as
+  $$
+  BEGIN
+    UPDATE Room
+    SET 
+      room_number = par_room_number,
+      cost = par_cost,
+      room_type = par_room_type
+
+    WHERE id_room = par_id_room
+  END
+  $$
+  LANGUAGE 'sql';
+
+  
 
 CREATE OR REPLACE FUNCTION newtransaction(par_transaction_number INT, par_date TIMESTAMP, par_fee INT,
                                           par_hotel_id           INT)
