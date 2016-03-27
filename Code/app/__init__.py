@@ -94,3 +94,21 @@ def paypal_webhook():
         if response_string != 'VERIFIED':
             raise ValueError('Did not receive expected IPN confirmation from PayPal')
     return make_response('')
+
+
+@app.route('/api/room/', methods=['POST'])
+def add_room():
+    req = json.loads(request.data)
+
+    res = spcall("newroom", (
+        req['room_number'],
+        req['cost'],
+        req['room_type'], 
+        req['hotel_id']
+        ))
+
+
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'error', 'message': res[0][0]})
+
+    return jsonify({'status': 'ok', 'message': res[0][0]})
