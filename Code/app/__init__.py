@@ -1,10 +1,8 @@
 # app/__init__.py
 
 from flask import Flask, request, jsonify, session, make_response
-from flask.ext.bcrypt import Bcrypt
 from app.config import BaseConfig
 import sys, os, flask, json
-from itertools import chain
 from models import DBconn, spcall
 from flask.ext.cors import CORS
 
@@ -13,20 +11,6 @@ from flask.ext.cors import CORS
 app = Flask(__name__)
 app.config.from_object(BaseConfig)
 CORS(app)
-
-bcrypt = Bcrypt(app)
-
-
-# Paypal
-
-def ordered_storage(f):
-    import werkzeug.datastructures
-    import flask
-    def decorator(*args, **kwargs):
-        flask.request.parameter_storage_class = werkzeug.datastructures.ImmutableOrderedMultiDict
-        return f(*args, **kwargs)
-
-    return decorator
 
 
 # routes
@@ -81,19 +65,6 @@ def status():
             return jsonify({'status': True})
     else:
         return jsonify({'status': False})
-
-
-@app.route('/webhooks/paypal', methods=['POST'])
-@ordered_storage
-def paypal_webhook():
-    # probably should have a sanity check here on the size of the form data to guard against DoS attacks
-    verify_args = chain(request.form.iteritems(), IPN_VERIFY_EXTRA_PARAMS)
-    verify_string = '&'.join(('%s=%s' % (param, value) for param, value in verify_args))
-    with closing(urlopen(IPN_URLSTRING, data=verify_string)) as paypal_verify_request:
-        response_string = paypal_verify_request.read()
-        if response_string != 'VERIFIED':
-            raise ValueError('Did not receive expected IPN confirmation from PayPal')
-    return make_response('')
 
 
 @app.route('/api/room/', methods=['POST'])
@@ -167,3 +138,43 @@ def updateroom():
 
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'error', 'message': res[0][0]})
+
+
+
+@app.route('/api/v1.0/feedback/', methods=['POST'])
+def feedback():
+    """             Creating a Feedback                   """
+
+    res = spcall("newfeedback", (request.form['name'], request.form['comment'], request.form['hotel_id']))
+
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'error', 'message': res[0][0]})
+
+    return jsonify({'status': 'ok', 'message': res[0][0]})
+
+
+@app.route('/api/v1.0/feedback/<id>/', methods=['GET'])
+def view_feedback(id):
+    
+    """             Viewing Specific Feedback                """
+    
+    res = spcall("getfeedback", id, True)
+
+    recs = []
+    for r in res:
+        recs.append({"id": int(r[0]), "name": r[1], "comment": r[2], "created_date": r[3]})
+    return jsonify({'status': 'ok', 'entries': recs, 'count': len(recs)})
+
+
+@app.route('/api/v1.0/search/<location>/', methods=['GET'])
+def search(location):
+    """             Searching a hotel through its location                   """
+
+    res = spcall("location_search", [location], True)
+
+    recs = []
+    for r in res:
+        recs.append({"id_hotel": int(r[0]), "hotel_name": r[1], "description": r[2], "email_address": r[3],
+                     "address": r[4], "contact_number": r[5], "no_of_restaurant": int(r[6]), "no_of_rooms": int(r[7]),
+                     "extra": r[8]})
+    return jsonify({'status': 'ok', 'entries': recs, 'count': len(recs)})
