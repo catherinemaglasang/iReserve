@@ -145,3 +145,25 @@ def get_rooms():
          })
 
     return jsonify({'status': 'ok', 'entries': recs, 'count': len(recs)})
+
+
+@app.route('/api/room/', methods=['PUT'])
+def updateroom():
+    jsn = json.loads(request.data)
+
+    id_room = jsn.get('id_room','')
+    room_number = jsn.get('room_number', '')
+    cost = jsn.get('cost', '')
+    room_type = jsn.get('room_type', '')
+
+    res = spcall('updateroom', (
+        id_room,
+        room_number,
+        cost,
+        room_type),True)
+
+    return jsonify({"status": "success"})
+
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'error', 'message': res[0][0]})
