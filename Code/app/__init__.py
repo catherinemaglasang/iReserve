@@ -112,3 +112,16 @@ def add_room():
         return jsonify({'status': 'error', 'message': res[0][0]})
 
     return jsonify({'status': 'ok', 'message': res[0][0]})
+
+
+@app.route('/api/room/<id>/', methods=['GET'])
+def get_roomid(id):
+
+    res = spcall('getid_room', [id])
+
+    if not res:
+        return jsonify({'status': 'error', 'message': 'Results Not Found'}),404
+
+    recs = res[0]
+    
+    return jsonify({'room_number' : str(recs[0]), 'cost': str(recs[1]), 'room_type': str(recs[2])})
