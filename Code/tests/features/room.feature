@@ -41,3 +41,12 @@ Scenario: Adding a room that has the field room_number and room_type empty
 	    When i click the add button
 	    Then i should '200' response 
 	    And a message "error" are returned
+
+
+Scenario: Retrieve room's details
+		Given a room exist with an id number "1"
+		When I retrieve the room with an id number '1'
+		Then I should get a '200' response
+		And the following details are returned:
+		| room_number | cost | room_type |
+	    | 300 | 4500 | one-bed |
