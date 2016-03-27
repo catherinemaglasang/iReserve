@@ -56,3 +56,15 @@ Scenario: Retrieve a non-existent room
 		When i retrieve a room with an id number '5'
 		Then it should have a field "status" containing "error"
 		And it should have a field "message" containing "Results Not Found"
+
+
+Scenario: Update room details 
+		Given a room with an id number "3" with the following details:
+		| room_number | cost | room_type |
+	    | 200 | 6000 | Luxury |
+	    When i update the room details into the following:
+	    | room_number | cost | room_type |
+	    | 200 | 6000 | twin-bed |
+	    Then i will get a '200' response
+	    And it should have a field "status" containing "success"
+
