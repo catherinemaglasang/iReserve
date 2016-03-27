@@ -5,7 +5,7 @@ import sys
 
 class DBconn:
     def __init__(self):
-        engine = create_engine('postgresql://postgres:kristel110496@localhost:5432/iReserve', echo=False)
+        engine = create_engine('postgresql://postgres:iReserve5432@localhost:5432/iReserve', echo=False)
         self.conn = engine.connect()
         self.trans = self.conn.begin()
 
