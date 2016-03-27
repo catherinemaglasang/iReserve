@@ -55,44 +55,46 @@ $$
 -- Feedback
 
 
-create or replace function newfeedback(par_feedback_id INT, par_comment TEXT, par_created_date TIMESTAMP, par_is_active BOOLEAN, par_hotel_id INT) returns TEXT AS
+create or replace function newfeedback(par_name VARCHAR, par_comment TEXT, par_hotel_id INT) returns TEXT AS
 $$
   DECLARE
-    loc_id INT;
     loc_res TEXT;
   BEGIN
-    SELECT INTO loc_id feedback_id FROM Feedback WHERE feedback_id = par_feedback_id;
-    if loc_id isnull THEN
+    if par_name = '' OR par_comment = '' THEN
+      loc_res = 'error';
+    ELSE
+      INSERT INTO Feedback(name, comment, created_date, is_active, hotel_id) VALUES (par_name, par_comment, current_timestamp, TRUE, par_hotel_id);
 
-      INSERT INTO Feedback(feedback_id, comment, created_date, is_active, hotel_id) VALUES (par_feedback_id, par_comment, par_created_date, TRUE, par_hotel_id);
-
-      loc_res = 'OK';
-
-      ELSE
-        loc_res = 'ID EXISTED';
-      end if;
-      return loc_res;
+      loc_res = 'Feedback Created';
+    END IF;
+    RETURN loc_res;
   END;
 $$
   LANGUAGE 'plpgsql';
 
-create or replace function getfeedback(OUT INT, OUT TEXT, OUT TIMESTAMP, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
+create or replace function getfeedback(OUT INT, OUT TEXT, OUT TEXT, OUT TIMESTAMP, OUT BOOLEAN, IN par_hotel_id INT) RETURNS SETOF RECORD AS
 $$
-  SELECT feedback_id, comment, created_date, is_active, hotel_id FROM Feedback;
-$$
-  LANGUAGE 'sql';
-
-create or replace function getfeedback_id(IN par_feedback_id INT, OUT TEXT, OUT TIMESTAMP, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
-$$
-  SELECT comment, created_date, is_active, hotel_id FROM Feedback WHERE feedback_id = par_feedback_id;
+  SELECT feedback_id, name, comment, created_date, is_active
+  FROM feedback
+  WHERE hotel_id = par_hotel_id
+  AND is_active = TRUE  ;
 $$
   LANGUAGE 'sql';
 
-create or replace function deletefeedback(par_feedback_id INT, par_comment TEXT, par_created_date TIMESTAMP, par_is_active BOOLEAN, par_hotel_id INT) returns TEXT AS
+create or replace function getfeedback_id(IN par_feedback_id INT, OUT TEXT, OUT TEXT, OUT TIMESTAMP, OUT BOOLEAN, OUT INT) RETURNS SETOF RECORD AS
 $$
-  DELETE FROM Feedback WHERE feedback_id IN (SELECT feedback_id FROM Feedback WHERE feedback_id = par_feedback_id);
+  SELECT name, comment, created_date, is_active, hotel_id FROM Feedback WHERE feedback_id = par_feedback_id;
 $$
   LANGUAGE 'sql';
+
+create or replace function deletefeedback(IN par_feedback_id INT) returns TEXT AS
+$$
+  UPDATE feedback
+  SET is_active = False
+  WHERE feedback_id = par_feedback_id;
+$$
+  LANGUAGE 'sql';
+
 
 
 
@@ -258,3 +260,28 @@ create or replace function gettransaction_id(IN par_id INT, OUT INT, OUT Timesta
 
   $$
     LANGUAGE 'sql';
+
+create or replace function location_search(IN par_search VARCHAR, OUT INT, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR, OUT VARCHAR, OUT INT, OUT INT, OUT TEXT) RETURNS SETOF RECORD AS
+  $$
+    SELECT id_hotel, hotel_name, description, email_address, address, contact_number,
+      no_of_restaurant, no_of_rooms, extra
+    FROM hotel
+    WHERE address LIKE '%'||par_search||'%'
+    OR address LIKE par_search||'%'
+    OR address LIKE '%'||par_search;
+
+  $$
+    LANGUAGE 'sql';
+
+
+CREATE OR REPLACE FUNCTION views(par_hote_id INT)
+  RETURNS VOID AS
+$$
+
+    UPDATE visited
+    SET
+      count = count + 1
+    WHERE hotel_id = par_hote_id;
+
+  $$
+LANGUAGE 'sql';
