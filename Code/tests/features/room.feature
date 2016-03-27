@@ -50,3 +50,9 @@ Scenario: Retrieve room's details
 		And the following details are returned:
 		| room_number | cost | room_type |
 	    | 300 | 4500 | one-bed |
+
+Scenario: Retrieve a non-existent room
+		Given a room with an id number "5" doesnt exist
+		When i retrieve a room with an id number '5'
+		Then it should have a field "status" containing "error"
+		And it should have a field "message" containing "Results Not Found"
