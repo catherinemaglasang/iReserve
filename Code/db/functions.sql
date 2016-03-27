@@ -152,18 +152,26 @@ $$
     BEGIN
     SELECT INTO loc_room_number par_room_number FROM Room WHERE room_number = par_room_number;
     if loc_room_number isnull THEN
-
-      INSERT INTO ROOM (room_number,cost, room_type, hotel_id) VALUES
-      (par_room_number, par_cost, par_room_type, par_hotel_id);
-      loc_res = 'OK';
+    
+  if par_room_number = '' OR par_room_type = '' THEN
+    loc_res = 'error';
+      
+  ELSE
+    INSERT INTO ROOM (room_number,cost, room_type, hotel_id) VALUES
+    (par_room_number, par_cost, par_room_type, par_hotel_id);
+    loc_res = 'OK';
+  end if;
 
       ELSE
         loc_res = 'ID EXISTED';
       end if;
+      
       return loc_res;
   END;
 $$
   LANGUAGE 'plpgsql';
+
+
 
 
 --select newroom('200', 2000, 'twin-bed', 1);
