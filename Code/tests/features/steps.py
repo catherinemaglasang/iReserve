@@ -130,6 +130,30 @@ def response_message(step):
 	assert_equals(world.resp['message'], "error")
 
 
+#Retrieving room details
+
+@step(u'Given a room exist with an id number "1"')
+def given_some_rooms_are_in_the_system(step):
+	world.browser = TestApp(app)
+	world.room = world.app.get('/api/room/1/')
+	world.resp = json.loads(world.room.data)
+
+@step(u'When I retrieve the room with an id number \'(.*)\'')
+def when_i_retrieve_the_room_number(step,id):
+    world.response = world.app.get('/api/room/{}/'.format(id))
+
+@step(u'Then I should get a \'(.*)\' response')
+def then_i_should_get_response(step, expected_status_code):
+    assert_equals(world.response.status_code, int(expected_status_code))
+
+    
+@step(u'And the following details are returned:')
+def details_returned(step):
+	world.info = step.hashes[0]
+	assert_equals(world.info, json.loads(world.response.data))
+
+
+
 
 
 
