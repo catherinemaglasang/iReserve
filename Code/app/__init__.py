@@ -125,3 +125,23 @@ def get_roomid(id):
     recs = res[0]
     
     return jsonify({'room_number' : str(recs[0]), 'cost': str(recs[1]), 'room_type': str(recs[2])})
+
+
+@app.route('/api/room/', methods=['GET'])
+def get_rooms():
+
+    res = spcall('getroom', ())
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({
+         "id": int(r[0]),
+         "room_number": r[1],
+         "cost": (r[2]),
+         "room_type": str(r[3])
+         })
+
+    return jsonify({'status': 'ok', 'entries': recs, 'count': len(recs)})
