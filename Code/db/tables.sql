@@ -32,7 +32,8 @@ CREATE TABLE Transaction (
   date_of_transaction TIMESTAMP,
   fee                 INT,
   is_done             BOOLEAN,
-  hotel_id            INT REFERENCES Hotel (id_hotel)
+  hotel_id            INT REFERENCES Hotel (id_hotel),
+  room_id             INT REFERENCES Room (id_room)
 );
  
 
@@ -53,3 +54,26 @@ CREATE TABLE Feedback (
   hotel_id INT REFERENCES Hotel(id_hotel)
 );
 
+CREATE TABLE Image (
+  id_image  SERIAL PRIMARY KEY,
+  img VARCHAR(100),
+  hotel_id  INT REFERENCES Hotel (id_hotel)
+);
+
+CREATE TABLE Hotel_features (
+  id_hotel_features SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  hotel_id  INT REFERENCES Hotel (id_hotel)
+);
+
+CREATE TABLE Hotel_features_list (
+  id_hotel_features_list SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  hotel_features INT REFERENCES Hotel_features (id_hotel_features)
+);
+
+CREATE TABLE Visited (
+  id_visited  SERIAL PRIMARY KEY,
+  count INT,
+  hotel_id INT REFERENCES Hotel (id_hotel)
+);
