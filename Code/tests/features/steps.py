@@ -153,7 +153,32 @@ def details_returned(step):
 	assert_equals(world.info, json.loads(world.response.data))
 
 
-#Retrieving a non-existent room
+#Retrieving a non-existent roo
+
+#Updating room details
+
+@step(u'Given a room with an id number "3" with the following details:')
+def given_the_following_details(step):
+	world.details3 = step.hashes[0]
+
+@step(u'When i update the room details into the following:')
+def change_details(step):
+	world.details4 = step.hashes[0]
+	world.browser = TestApp(app)
+	world.room_url = '/api/room/'
+	world.response = world.app.put(world.room_url, data = json.dumps(world.details4))
+
+
+@step(u'Then i will get a \'([^\']*)\' response')
+def then_i_should_get_response(step, expected_status_code):
+    assert_equals(world.response.status_code, int(expected_status_code))
+
+
+@step(u'And it should have a field "status" containing "success"')
+def status_success(step):
+	world.resp = json.loads(world.response.data)
+	assert_equals(world.resp['status'], "success")
+
 
 @step(u'Given a room with an id number "5" doesnt exist')
 def room_doesnt_exist(step):
@@ -174,7 +199,27 @@ def response_message(step):
 	assert_equals(world.resp['message'], "Results Not Found")
 
 
+#Updating room details
+
+@step(u'Given a room with an id number "3" with the following details:')
+def given_the_following_details(step):
+	world.details3 = step.hashes[0]
+
+@step(u'When i update the room details into the following:')
+def change_details(step):
+	world.details4 = step.hashes[0]
+	world.browser = TestApp(app)
+	world.room_url = '/api/room/'
+	world.response = world.app.put(world.room_url, data = json.dumps(world.details4))
 
 
+@step(u'Then i will get a \'([^\']*)\' response')
+def then_i_should_get_response(step, expected_status_code):
+    assert_equals(world.response.status_code, int(expected_status_code))
 
+
+@step(u'And it should have a field "status" containing "success"')
+def status_success(step):
+	world.resp = json.loads(world.response.data)
+	assert_equals(world.resp['status'], "success")
 
