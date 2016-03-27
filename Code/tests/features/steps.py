@@ -153,6 +153,27 @@ def details_returned(step):
 	assert_equals(world.info, json.loads(world.response.data))
 
 
+#Retrieving a non-existent room
+
+@step(u'Given a room with an id number "5" doesnt exist')
+def room_doesnt_exist(step):
+	assert True
+
+@step(u'When i retrieve a room with an id number \'(.*)\'')
+def retrieve_room(step,id):
+	 world.response = world.app.get('/api/room/{}/'.format(id))
+
+@step(u'Then it should have a field "status" containing "error"')
+def response_status(step):
+	world.resp = json.loads(world.response.data)
+	assert_equals(world.resp['status'], "error")
+
+@step(u'And it should have a field "message" containing "Results Not Found"')
+def response_message(step):
+	world.resp = json.loads(world.response.data)
+	assert_equals(world.resp['message'], "Results Not Found")
+
+
 
 
 
